@@ -1431,6 +1431,7 @@ function spawnBubbleById(id){
 
       const stageRect = bubbleStage.getBoundingClientRect();
       const stageW = stageRect.width;
+      const stageH = stageRect.height;   // 👈 ADD THIS LINE
 
       data.forEach((item) => {
         const el = document.createElement("div");
@@ -1464,7 +1465,7 @@ function spawnBubbleById(id){
 
         do {
           x = Math.random() * Math.max(1, (stageW - size));
-          y = - (60 + Math.random() * 260); // -60 to about -320
+          y = (Math.random() * (stageH * 0.35)) - size;
           tries++;
         } while (overlaps(x, y) && tries < 60);
 
