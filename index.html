@@ -250,6 +250,59 @@ touch-action: manipulation;
       color: rgba(11,31,77,.70);
       line-height:1.25;
     }
+    /* Category-tinted bubbles */
+.bubble.c-px,
+.bubble.c-staff,
+.bubble.c-culture,
+.bubble.c-quality{
+  background: var(--priority-bg) !important;
+  border-color: var(--priority-border) !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,.10), 0 0 0 3px rgba(255,255,255,.35) inset !important;
+}
+
+/* 🟣 Patient Experience */
+.bubble.c-px{
+  --priority-bg: radial-gradient(circle at 30% 25%,
+    rgba(255,255,255,.98) 0%,
+    rgba(255,255,255,.62) 18%,
+    rgba(230,0,126,.55) 55%,
+    rgba(230,0,126,.22) 82%,
+    rgba(11,31,77,.08) 100%);
+  --priority-border: rgba(230,0,126,.75);
+}
+
+/* 🔵 Staffing Optimization */
+.bubble.c-staff{
+  --priority-bg: radial-gradient(circle at 30% 25%,
+    rgba(255,255,255,.98) 0%,
+    rgba(255,255,255,.62) 18%,
+    rgba(60,141,204,.60) 55%,
+    rgba(60,141,204,.22) 82%,
+    rgba(11,31,77,.08) 100%);
+  --priority-border: rgba(60,141,204,.78);
+}
+
+/* 🟠 Culture & Retention */
+.bubble.c-culture{
+  --priority-bg: radial-gradient(circle at 30% 25%,
+    rgba(255,255,255,.98) 0%,
+    rgba(255,255,255,.62) 18%,
+    rgba(245,166,35,.70) 55%,
+    rgba(245,166,35,.25) 82%,
+    rgba(11,31,77,.08) 100%);
+  --priority-border: rgba(245,166,35,.85);
+}
+
+/* 🟢 Clinical Quality & Safety */
+.bubble.c-quality{
+  --priority-bg: radial-gradient(circle at 30% 25%,
+    rgba(255,255,255,.98) 0%,
+    rgba(255,255,255,.62) 18%,
+    rgba(46,191,145,.55) 55%,
+    rgba(46,191,145,.22) 82%,
+    rgba(11,31,77,.08) 100%);
+  --priority-border: rgba(46,191,145,.78);
+}
     .bubble.popping{ animation: pop .22s ease forwards; }
     @keyframes pop{
       0%   { transform: scale(1); opacity: 1; }
@@ -1137,14 +1190,27 @@ touch-action: manipulation;
       "https://script.google.com/macros/s/AKfycbxQfYi_Xp3PXd8Jw34YrHAhPVTunJf091kvs-F916MwRUhaLOrYLrKCvVcd5uuncUAP/exec";
 
     // Your selectable areas
-    const data = [
-      { id:"px",       label:"Patient Experience", desc:"Make everyday moments visible that impact HCAHPS." },
-      { id:"quality",  label:"Quality & Safety",   desc:"Drive consistent behaviors that improve outcomes." },
-      { id:"retention",label:"Retention",         desc:"Keep great nurses and reduce churn." },
-      { id:"onboarding",label:"Onboarding",       desc:"Get new hires productive faster." },
-      { id:"culture",  label:"Team Culture",      desc:"Boost teamwork, recognition, and belonging." },
-      { id:"staffing", label:"Staffing Stability",desc:"Cut contract labor reliance and keep units staffed." },
-    ];
+   const data = [
+  // 🟣 Patient Experience
+  { id:"svc_recovery", label:"Inconsistent service recovery", desc:"Patient Experience" },
+  { id:"hit_miss_px",  label:"“Hit-or-miss” patient experience", desc:"Patient Experience" },
+  { id:"rounding_var", label:"Rounding behaviors vary", desc:"Patient Experience" },
+
+  // 🔵 Staffing Optimization
+  { id:"open_shifts",  label:"Open shifts persist", desc:"Staffing Optimization" },
+  { id:"agency_high",  label:"Agency spend is too high", desc:"Staffing Optimization" },
+  { id:"attendance",   label:"Unreliable attendance", desc:"Staffing Optimization" },
+
+  // 🟠 Culture & Retention
+  { id:"burnout",      label:"Burnout is rising", desc:"Culture & Retention" },
+  { id:"recognition",  label:"Recognition is inconsistent", desc:"Culture & Retention" },
+  { id:"newhire_to",   label:"High new-hire turnover", desc:"Culture & Retention" },
+
+  // 🟢 Clinical Quality & Safety
+  { id:"ebp_gaps",     label:"Evidence-based practice gaps", desc:"Clinical Quality & Safety" },
+  { id:"edu_low",      label:"Low education participation", desc:"Clinical Quality & Safety" },
+  { id:"hae_reduce",   label:"Reducing hospital-acquired events", desc:"Clinical Quality & Safety" },
+];
 
     // One aligned game per area
     const gameMap = {
@@ -1320,16 +1386,28 @@ That’s visibility.` },
 
    // ✅ One bright color per priority
 const priorityClass = {
-  px:        "c-px",
-  quality:   "c-quality",
-  retention: "c-retention",
-  onboarding:"c-onboarding",
-  culture:   "c-culture",
-  staffing:  "c-staffing",
+  // 🟣 Patient Experience
+  svc_recovery:"c-px",
+  hit_miss_px:"c-px",
+  rounding_var:"c-px",
+
+  // 🔵 Staffing Optimization
+  open_shifts:"c-staff",
+  agency_high:"c-staff",
+  attendance:"c-staff",
+
+  // 🟠 Culture & Retention
+  burnout:"c-culture",
+  recognition:"c-culture",
+  newhire_to:"c-culture",
+
+  // 🟢 Clinical Quality & Safety
+  ebp_gaps:"c-quality",
+  edu_low:"c-quality",
+  hae_reduce:"c-quality",
 };
 
 function applyPriorityColor(el, id){
-  // remove any previous c-* class
   el.className = el.className.replace(/\bc-\S+\b/g, "").trim();
   el.classList.add(priorityClass[id] || "c-default");
 }
@@ -1587,15 +1665,19 @@ function explodeAt(x, y, variantClass){
   burst.style.top  = y + "px";
 
   // colors based on bubble class (priority color)
-  let colors = ["#E6007E","#3C8DCC","#F5A623","#FFFFFF"]; // fallback
+  let colors = ["#E6007E","#3C8DCC","#F5A623","#2EBF91","#FFFFFF"];
 
-  if (variantClass === "c-px")        colors = ["#E6007E","#FF4FB2","#FFFFFF"];
-  if (variantClass === "c-quality")   colors = ["#3C8DCC","#6FC8FF","#FFFFFF"];
-  if (variantClass === "c-retention") colors = ["#F5A623","#FFD36E","#FFFFFF"];
-  if (variantClass === "c-onboarding")colors = ["#7CC6FF","#BDE7FF","#FFFFFF"];
-  if (variantClass === "c-culture")   colors = ["#FF66B5","#FFA3D2","#FFFFFF"];
-  if (variantClass === "c-staffing")  colors = ["#FFD08A","#FFE3B8","#FFFFFF"];
+if (variantClass === "c-px")
+  colors = ["#E6007E","#FF4FB2","#FFFFFF"];
 
+if (variantClass === "c-staff")
+  colors = ["#3C8DCC","#6FC8FF","#FFFFFF"];
+
+if (variantClass === "c-culture")
+  colors = ["#F5A623","#FFD36E","#FFFFFF"];
+
+if (variantClass === "c-quality")
+  colors = ["#2EBF91","#7CF0C8","#FFFFFF"];
   const count = 60; // 🔥 more particles
 
   for (let i=0;i<count;i++){
@@ -1658,13 +1740,19 @@ function handleBubblePop(b){
   const cx = (r.left - sr.left) + r.width/2;
   const cy = (r.top  - sr.top)  + r.height/2;
 
-  let variant = "";
-  if (b.el.classList.contains("c-px")) variant = "c-px";
-  if (b.el.classList.contains("c-quality")) variant = "c-quality";
-  if (b.el.classList.contains("c-retention")) variant = "c-retention";
-  if (b.el.classList.contains("c-onboarding")) variant = "c-onboarding";
-  if (b.el.classList.contains("c-culture")) variant = "c-culture";
-  if (b.el.classList.contains("c-staffing")) variant = "c-staffing";
+let variant = "";
+
+if (b.el.classList.contains("c-px"))
+  variant = "c-px";
+
+if (b.el.classList.contains("c-staff"))
+  variant = "c-staff";
+
+if (b.el.classList.contains("c-culture"))
+  variant = "c-culture";
+
+if (b.el.classList.contains("c-quality"))
+  variant = "c-quality";
 
   explodeAt(cx, cy, variant);
 
