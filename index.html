@@ -48,21 +48,18 @@ body{
   inset:0;
   display:grid;
   place-items:center;
-  padding:18px;
+  padding:0;
   z-index:1200;
-  background:#081735; /* deep navy backdrop */
+  background:#081735;
 }
 
 /* Full-bleed hero container */
 .introHero{
   position:relative;
-  width:min(920px, 100%);
-  aspect-ratio: 9 / 16;             /* phone-first ratio */
-  max-height: min(92svh, 920px);    /* iPhone safe viewport */
-  border-radius:26px;
+  width:100%;
+  height:100svh;   /* fills full screen safely on iPhone */
+  border-radius:0; /* remove card look */
   overflow:hidden;
-  box-shadow: 0 30px 90px rgba(0,0,0,.55);
-  border:1px solid rgba(255,255,255,.18);
 }
 /* ✅ Background image version (more reliable than <img>) */
 .introHeroBg{
@@ -72,12 +69,6 @@ body{
   background-repeat: no-repeat;
 }
 /* Desktop tweak */
-@media (min-width: 800px){
-  .introHero{
-    aspect-ratio: 16 / 9;
-    max-height: min(86svh, 720px);
-  }
-}
 
 /* Background image */
 .introHeroImg{
