@@ -1412,9 +1412,10 @@ function spawnBubbleById(id){
   const size = Math.min(160, Math.max(115, stageW * 0.28));
   const x = Math.random() * Math.max(1, (stageW - size));
   const y = - (80 + Math.random()*220);
-  const speed = 0.35 + Math.random() * 0.35;
+  const speed = 0.45; // consistent, calm fall speed
+  const drift = (Math.random() - 0.5) * 0.4;  // gentle left/right float
 
-  const bObj = { id, el, x, y, size, speed, popped:false };
+  const bObj = { id, el, x, y, size, speed, drift, popped:false };
 
   const pop = () => { unlockAudio(); handleBubblePop(bObj); };
   el.addEventListener("click", pop);
@@ -1498,34 +1499,59 @@ el.addEventListener("touchend", (e)=>{ e.preventDefault(); pop(); }, { passive:f
         const stageH = rect.height;
 
         for (const b of bubbles){
-          if (b.popped) continue;
+  if (b.popped) continue;
 
-          b.y += b.speed * 1.35;
+  // vertical fall (slower + smoother)
+  b.y += b.speed * 0.9;
 
-          // recycle at bottom
-          if (b.y > stageH + 40){
-            b.y = - (Math.random() * 260 + 120);
+  // gentle horizontal drift
+  b.x += b.drift;
 
-            // pick a fresh x (avoid stacking)
-            let nx = 0;
-            let t = 0;
-            do {
-              nx = Math.random() * Math.max(1, (stageW - b.size));
-              t++;
-            } while (
-              t < 25 &&
-              bubbles.some(o =>
-                o !== b && !o.popped &&
-                Math.abs((nx + b.size/2) - (o.x + o.size/2)) < (b.size * 0.75)
-              )
-            );
+  // bounce softly off left/right edges
+  if (b.x <= 0 || b.x + b.size >= stageW) {
+    b.drift *= -1;
+  }
 
-            b.x = nx;
-          }
+  // ✅ simple collision spacing (ADD THIS RIGHT HERE)
+  for (let other of bubbles){
+    if (other === b || other.popped) continue;
 
-          b.el.style.transform = `translate3d(${b.x}px, ${b.y}px, 0)`;
-        }
+    const dx = (b.x + b.size/2) - (other.x + other.size/2);
+    const dy = (b.y + b.size/2) - (other.y + other.size/2);
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const minDist = b.size * 0.85;
 
+    if (dist < minDist){
+      const angle = Math.atan2(dy, dx);
+      const push = (minDist - dist) * 0.08;
+      b.x += Math.cos(angle) * push;
+      b.y += Math.sin(angle) * push;
+    }
+  }
+
+  // recycle at bottom
+  if (b.y > stageH + 40){
+    b.y = - (Math.random() * 260 + 120);
+
+    // pick a fresh x (avoid stacking)
+    let nx = 0;
+    let t = 0;
+    do {
+      nx = Math.random() * Math.max(1, (stageW - b.size));
+      t++;
+    } while (
+      t < 25 &&
+      bubbles.some(o =>
+        o !== b && !o.popped &&
+        Math.abs((nx + b.size/2) - (o.x + o.size/2)) < (b.size * 0.75)
+      )
+    );
+
+    b.x = nx;
+  }
+
+  b.el.style.transform = `translate3d(${b.x}px, ${b.y}px, 0)`;
+}
         bubbleRAF = requestAnimationFrame(tick);
       };
 
