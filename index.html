@@ -1512,6 +1512,8 @@ const stageH = stageRect.height;   // ✅ ADD THIS
   if (b.x <= 0 || b.x + b.size >= stageW) {
     b.drift *= -1;
   }
+          // ✅ hard clamp so nothing can drift off-screen
+b.x = Math.max(0, Math.min(stageW - b.size, b.x));
 
   // ✅ simple collision spacing (ADD THIS RIGHT HERE)
   for (let other of bubbles){
@@ -1549,6 +1551,7 @@ const stageH = stageRect.height;   // ✅ ADD THIS
     );
 
     b.x = nx;
+    b.x = Math.max(0, Math.min(stageW - b.size, b.x));
   }
 
   b.el.style.transform = `translate3d(${b.x}px, ${b.y}px, 0)`;
