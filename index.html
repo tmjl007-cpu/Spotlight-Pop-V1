@@ -64,7 +64,13 @@ body{
   box-shadow: 0 30px 90px rgba(0,0,0,.55);
   border:1px solid rgba(255,255,255,.18);
 }
-
+/* ✅ Background image version (more reliable than <img>) */
+.introHeroBg{
+  background-image: url("./spotlight-pop.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 /* Desktop tweak */
 @media (min-width: 800px){
   .introHero{
@@ -898,12 +904,10 @@ touch-action: manipulation;
 
  <!-- Intro Screen -->
 <div id="introScreen" class="screen" role="dialog" aria-modal="true" aria-label="Intro">
-  <div class="introHero">
-    <img src="./spotlight-pop.jpg" alt="Spotlight Pop" class="introHeroImg" />
+  <div class="introHero introHeroBg">
     <div class="introHeroShade"></div>
 
     <div class="introOverlay">
-      <!-- IMPORTANT: keep id="startBtn" so your existing JS still works -->
       <button id="startBtn" class="startHeroBtn" type="button">
         Start Popping
       </button>
@@ -1307,24 +1311,7 @@ That’s visibility.` },
     }
 
     // ---------- Bubble visuals ----------
-    function applyPriorityColor(el, id){
-  el.classList.remove(
-    "v-magenta","v-blue","v-orange",
-    "c-px","c-quality","c-retention",
-    "c-onboarding","c-culture","c-staffing","c-default"
-  );
 
-  const map = {
-    px: "c-px",
-    quality: "c-quality",
-    retention: "c-retention",
-    onboarding: "c-onboarding",
-    culture: "c-culture",
-    staffing: "c-staffing",
-  };
-
-  el.classList.add(map[id] || "c-default");
-}
    // ✅ One bright color per priority
 const priorityClass = {
   px:        "c-px",
