@@ -990,28 +990,6 @@ touch-action: manipulation;
     </div>
   </div>
 
-  <!-- Story Overlay -->
-  <div id="storyOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Story moment">
-    <div class="modal">
-      <div class="modalTop">
-        <div>
-          <h2 class="title">A moment on the floor</h2>
-          <p class="subtext">This is what “visibility” looks like in real life.</p>
-        </div>
-        <button class="closeBtn" id="closeStoryBtn" aria-label="Close story">✕</button>
-      </div>
-
-      <div class="storyCard">
-        <div class="storyKicker" id="storyKicker">Your shift, in the spotlight</div>
-        <div class="storyText" id="storyText"></div>
-      </div>
-
-      <div class="actions actionsStacked">
-        <button id="storyContinueBtn" class="primaryCta" type="button">Continue to your Spotlight</button>
-        <button class="secondary subtleBack" id="storyBackBtn" type="button">Back to game</button>
-      </div>
-    </div>
-  </div>
 
   <!-- Results Overlay -->
   <div id="resultsOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Results">
@@ -1265,13 +1243,6 @@ That’s visibility.` },
     const continueBtn   = document.getElementById("continueBtn");
     const progressFill  = document.getElementById("progressFill");
     const progressText  = document.getElementById("progressText");
-
-    const storyOverlay    = document.getElementById("storyOverlay");
-    const storyKickerEl   = document.getElementById("storyKicker");
-    const storyTextEl     = document.getElementById("storyText");
-    const closeStoryBtn   = document.getElementById("closeStoryBtn");
-    const storyContinueBtn= document.getElementById("storyContinueBtn");
-    const storyBackBtn    = document.getElementById("storyBackBtn");
 
     const resultsOverlay = document.getElementById("resultsOverlay");
     const resultsChips   = document.getElementById("resultsChips");
@@ -1779,19 +1750,6 @@ function resetGame(){
 }
 
     // ---------- Story / Results / Lead ----------
-    function showStory(){
-      stopBubbleLoop();
-      const key = picked[picked.length - 1] || picked[0];
-      const s = storyMap[key] || {
-        kicker:"Activate visibility",
-        text:`Everyday moments matter.\nWhen they’re visible, they get reinforced.\nAnd the culture shifts—fast.`
-      };
-      storyKickerEl.textContent = s.kicker;
-      storyTextEl.textContent = s.text;
-      storyOverlay.classList.remove("hidden");
-    }
-
-    function closeStory(){ storyOverlay.classList.add("hidden"); }
 
     function generateRecommendation(ids){
       const has = (x)=>ids.includes(x);
@@ -2027,17 +1985,12 @@ function resetGame(){
     // Reset
     resetBtn.addEventListener("click", resetGame);
 
-    // Continue -> Story
-    continueBtn.addEventListener("click", showStory);
+    // Continue -> Results (skip story)
+continueBtn.addEventListener("click", () => {
+  showResults();
+  requestAnimationFrame(() => requestAnimationFrame(burstConfetti));
+});
 
-    // Story controls
-    closeStoryBtn.addEventListener("click", closeStory);
-    storyBackBtn.addEventListener("click", closeStory);
-    storyContinueBtn.addEventListener("click", () => {
-      closeStory();
-      showResults();
-      requestAnimationFrame(() => requestAnimationFrame(burstConfetti));
-    });
 
     // Results controls
     closeResultsBtn.addEventListener("click", () => { closeResults(); startBubbleLoop(); });
@@ -2058,7 +2011,7 @@ function resetGame(){
     refreshScoreBtn.addEventListener("click", loadScoreboard);
 
     // Click-outside closes overlays
-    [storyOverlay, resultsOverlay, leadOverlay, scoreOverlay].forEach(ov=>{
+    [resultsOverlay, leadOverlay, scoreOverlay].forEach(ov=>{
       ov.addEventListener("click", (e)=>{
         if (e.target === ov) ov.classList.add("hidden");
       });
@@ -2070,7 +2023,6 @@ function resetGame(){
       if (!scoreOverlay.classList.contains("hidden")) return scoreOverlay.classList.add("hidden");
       if (!leadOverlay.classList.contains("hidden")) return closeLead();
       if (!resultsOverlay.classList.contains("hidden")) return closeResults();
-      if (!storyOverlay.classList.contains("hidden")) return closeStory();
     });
 
     // Lead submit
@@ -2169,7 +2121,6 @@ function resetGame(){
         // close overlays
         leadOverlay.classList.add("hidden");
         resultsOverlay.classList.add("hidden");
-        storyOverlay.classList.add("hidden");
         scoreOverlay.classList.add("hidden");
 
         // reset lead UI
