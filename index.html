@@ -316,18 +316,18 @@ touch-action: manipulation;
       100%{ transform: translate3d(0,0,0) scale(1); }
     }
 /* ✅ FORCE priority color classes to override base .bubble background */
+/* ✅ Category-tinted bubbles (4-color system) */
 .bubble.c-px,
-.bubble.c-quality,
-.bubble.c-retention,
-.bubble.c-onboarding,
+.bubble.c-staff,
 .bubble.c-culture,
-.bubble.c-staffing{
+.bubble.c-quality{
   background: var(--priority-bg) !important;
   border-color: var(--priority-border) !important;
-  box-shadow: 0 10px 24px rgba(0,0,0,.10), 0 0 0 3px rgba(255,255,255,.35) inset !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,.10),
+              0 0 0 3px rgba(255,255,255,.35) inset !important;
 }
 
-/* Each priority sets its own variables */
+/* 🟣 Patient Experience */
 .bubble.c-px{
   --priority-bg: radial-gradient(circle at 30% 25%,
     rgba(255,255,255,.98) 0%,
@@ -338,7 +338,8 @@ touch-action: manipulation;
   --priority-border: rgba(230,0,126,.75);
 }
 
-.bubble.c-quality{
+/* 🔵 Staffing Optimization */
+.bubble.c-staff{
   --priority-bg: radial-gradient(circle at 30% 25%,
     rgba(255,255,255,.98) 0%,
     rgba(255,255,255,.62) 18%,
@@ -348,7 +349,8 @@ touch-action: manipulation;
   --priority-border: rgba(60,141,204,.78);
 }
 
-.bubble.c-retention{
+/* 🟠 Culture & Retention */
+.bubble.c-culture{
   --priority-bg: radial-gradient(circle at 30% 25%,
     rgba(255,255,255,.98) 0%,
     rgba(255,255,255,.62) 18%,
@@ -358,44 +360,15 @@ touch-action: manipulation;
   --priority-border: rgba(245,166,35,.85);
 }
 
-.bubble.c-onboarding{
+/* 🟢 Clinical Quality & Safety */
+.bubble.c-quality{
   --priority-bg: radial-gradient(circle at 30% 25%,
     rgba(255,255,255,.98) 0%,
     rgba(255,255,255,.62) 18%,
-    rgba(124,198,255,.75) 55%,
-    rgba(124,198,255,.28) 82%,
+    rgba(46,191,145,.55) 55%,
+    rgba(46,191,145,.22) 82%,
     rgba(11,31,77,.08) 100%);
-  --priority-border: rgba(124,198,255,.90);
-}
-
-.bubble.c-culture{
-  --priority-bg: radial-gradient(circle at 30% 25%,
-    rgba(255,255,255,.98) 0%,
-    rgba(255,255,255,.62) 18%,
-    rgba(255,102,181,.65) 55%,
-    rgba(255,102,181,.22) 82%,
-    rgba(11,31,77,.08) 100%);
-  --priority-border: rgba(255,102,181,.85);
-}
-
-.bubble.c-staffing{
-  --priority-bg: radial-gradient(circle at 30% 25%,
-    rgba(255,255,255,.98) 0%,
-    rgba(255,255,255,.62) 18%,
-    rgba(255,208,138,.85) 55%,
-    rgba(255,208,138,.28) 82%,
-    rgba(11,31,77,.08) 100%);
-  --priority-border: rgba(255,208,138,.95);
-}
-    /* ✅ Brighter, fixed colors per priority (Gratia-inspired) */
-.bubble.c-px{
-  background: radial-gradient(circle at 30% 25%,
-    rgba(255,255,255,.98) 0%,
-    rgba(255,255,255,.65) 22%,
-    rgba(230,0,126,.35) 55%,
-    rgba(230,0,126,.18) 78%,
-    rgba(11,31,77,.08) 100%);
-  border-color: rgba(230,0,126,.55);
+  --priority-border: rgba(46,191,145,.78);
 }
 
 /* ---------- Bubble "explode" particles (BIGGER: dots + stars) ---------- */
