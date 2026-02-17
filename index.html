@@ -1004,11 +1004,6 @@ touch-action: manipulation;
 
       <div class="chips" id="resultsChips"></div>
 
-      <div class="box">
-        <div class="boxtitle" id="recTitle">Recommended focus</div>
-        <p class="boxtext" id="recText"></p>
-      </div>
-
       <div class="title" style="margin-top:22px;">Gratia games aligned to your priorities</div>
       <div class="gameGrid" id="gameGrid"></div>
 
@@ -1246,8 +1241,6 @@ That’s visibility.` },
 
     const resultsOverlay = document.getElementById("resultsOverlay");
     const resultsChips   = document.getElementById("resultsChips");
-    const recTitleEl     = document.getElementById("recTitle");
-    const recTextEl      = document.getElementById("recText");
     const gameGrid       = document.getElementById("gameGrid");
     const closeResultsBtn= document.getElementById("closeResultsBtn");
     const backBtn        = document.getElementById("backBtn");
@@ -1751,48 +1744,11 @@ function resetGame(){
 
     // ---------- Story / Results / Lead ----------
 
-    function generateRecommendation(ids){
-      const has = (x)=>ids.includes(x);
-
-      if (has("staffing") && has("retention")){
-        return {
-          title: "Recommended focus: staffing + retention",
-          text: "Pair staffing support with recognition loops so units stabilize quickly and top performers stay visible."
-        };
-      }
-      if (has("quality") && (has("px") || has("culture"))){
-        return {
-          title: "Recommended focus: quality + experience",
-          text: "Tie daily behaviors to visible recognition so leaders reinforce what ‘great’ looks like in real time."
-        };
-      }
-      if (has("onboarding") && has("culture")){
-        return {
-          title: "Recommended focus: faster ramp + belonging",
-          text: "Use onboarding moments to build connection early, then keep momentum with lightweight, shift-friendly recognition."
-        };
-      }
-      if (has("quality")){
-        return {
-          title: "Recommended focus: measurable behaviors",
-          text: "Anchor on a clear set of behaviors and make them visible daily so leaders can reinforce and replicate what works."
-        };
-      }
-      return {
-        title: "Recommended focus: activate visibility",
-        text: "Your priorities benefit from making everyday moments visible and reinforcing the right behaviors consistently."
-      };
-    }
-
     function showResults(){
       resultsChips.innerHTML = picked.map(id => {
         const item = data.find(x=>x.id===id);
         return `<div class="chip">${item ? item.label : id}</div>`;
       }).join("");
-
-      const rec = generateRecommendation(picked);
-      recTitleEl.textContent = rec.title;
-      recTextEl.textContent = rec.text;
 
       gameGrid.innerHTML = picked.map(id=>{
         const gm = gameMap[id] || { name:"Gratia Game", why:"Aligned to your selected priority.", tags:[] };
