@@ -1429,9 +1429,8 @@ function spawnBubbleById(id){
 
       resetBubbles();
 
-      const stageRect = bubbleStage.getBoundingClientRect();
-      const stageW = stageRect.width;
-      const stageH = stageRect.height;   // 👈 ADD THIS LINE
+      const stageW = bubbleStage.clientWidth;
+const stageH = bubbleStage.clientHeight;
 
       data.forEach((item) => {
         const el = document.createElement("div");
@@ -1469,9 +1468,10 @@ function spawnBubbleById(id){
           tries++;
         } while (overlaps(x, y) && tries < 60);
 
-        const speed = 0.35 + Math.random() * 0.35; // slow-ish
+       const speed = 0.45;                         // ✅ same speed for all (recommended)
+const drift = (Math.random() - 0.5) * 0.4;  // ✅ gentle horizontal drift
 
-        const b = { id: item.id, el, x, y, size, speed, popped:false };
+const b = { id: item.id, el, x, y, size, speed, drift, popped:false };
 
        const pop = () => {
   unlockAudio();     // ✅ first user gesture unlocks audio on iPhone
@@ -1495,9 +1495,9 @@ el.addEventListener("touchend", (e)=>{ e.preventDefault(); pop(); }, { passive:f
       const tick = () => {
         if (!bubbleRunning) return;
 
-        const rect = bubbleStage.getBoundingClientRect();
-        const stageW = rect.width;
-        const stageH = rect.height;
+       const stageRect = bubbleStage.getBoundingClientRect();
+const stageW = stageRect.width;
+const stageH = stageRect.height;   // ✅ ADD THIS
 
         for (const b of bubbles){
   if (b.popped) continue;
