@@ -1387,27 +1387,28 @@ That’s visibility.` },
    // ✅ One bright color per priority
 const priorityClass = {
   // 🟣 Patient Experience
-  svc_recovery:"c-px",
-  hit_miss_px:"c-px",
-  rounding_var:"c-px",
+  service_recovery: "c-px",
+  hit_or_miss_px: "c-px",
+  rounding_varies: "c-px",
 
   // 🔵 Staffing Optimization
-  open_shifts:"c-staff",
-  agency_high:"c-staff",
-  attendance:"c-staff",
+  open_shifts: "c-staff",
+  agency_spend: "c-staff",
+  unreliable_attendance: "c-staff",
 
   // 🟠 Culture & Retention
-  burnout:"c-culture",
-  recognition:"c-culture",
-  newhire_to:"c-culture",
+  burnout_rising: "c-culture",
+  recognition_inconsistent: "c-culture",
+  new_hire_turnover: "c-culture",
 
   // 🟢 Clinical Quality & Safety
-  ebp_gaps:"c-quality",
-  edu_low:"c-quality",
-  hae_reduce:"c-quality",
+  ebp_gaps: "c-quality",
+  low_education: "c-quality",
+  hac_reduction: "c-quality",
 };
 
 function applyPriorityColor(el, id){
+  // remove any previous c-* class
   el.className = el.className.replace(/\bc-\S+\b/g, "").trim();
   el.classList.add(priorityClass[id] || "c-default");
 }
