@@ -253,6 +253,15 @@ touch-action: manipulation;
   border-color: var(--priority-border) !important;
   box-shadow: 0 10px 24px rgba(0,0,0,.10), 0 0 0 3px rgba(255,255,255,.35) inset !important;
 }
+    /* 👇 ADD THIS RIGHT HERE */
+.bubble.c-default{
+  background: radial-gradient(circle at 30% 25%,
+    rgba(255,255,255,.95) 0%,
+    rgba(255,255,255,.55) 28%,
+    rgba(255,255,255,.10) 60%,
+    rgba(11,31,77,.10) 100%);
+  border-color: rgba(255,255,255,.35);
+}
 
 /* 🟣 Patient Experience */
 .bubble.c-px{
@@ -1158,25 +1167,21 @@ touch-action: manipulation;
 
     // Your selectable areas
    const data = [
-  // 🟣 Patient Experience
-  { id:"svc_recovery", label:"Inconsistent service recovery", desc:"Patient Experience" },
-  { id:"hit_miss_px",  label:"“Hit-or-miss” patient experience", desc:"Patient Experience" },
-  { id:"rounding_var", label:"Rounding behaviors vary", desc:"Patient Experience" },
+  { id:"service_recovery",         label:"Inconsistent service recovery" },
+  { id:"hit_or_miss_px",           label:"“Hit-or-miss” patient experience" },
+  { id:"rounding_varies",          label:"Rounding behaviors vary" },
 
-  // 🔵 Staffing Optimization
-  { id:"open_shifts",  label:"Open shifts persist", desc:"Staffing Optimization" },
-  { id:"agency_high",  label:"Agency spend is too high", desc:"Staffing Optimization" },
-  { id:"attendance",   label:"Unreliable attendance", desc:"Staffing Optimization" },
+  { id:"open_shifts",              label:"Open shifts persist" },
+  { id:"agency_spend",             label:"Agency spend is too high" },
+  { id:"unreliable_attendance",    label:"Unreliable attendance" },
 
-  // 🟠 Culture & Retention
-  { id:"burnout",      label:"Burnout is rising", desc:"Culture & Retention" },
-  { id:"recognition",  label:"Recognition is inconsistent", desc:"Culture & Retention" },
-  { id:"newhire_to",   label:"High new-hire turnover", desc:"Culture & Retention" },
+  { id:"burnout_rising",           label:"Burnout is rising" },
+  { id:"recognition_inconsistent", label:"Recognition is inconsistent" },
+  { id:"new_hire_turnover",        label:"High new-hire turnover" },
 
-  // 🟢 Clinical Quality & Safety
-  { id:"ebp_gaps",     label:"Evidence-based practice gaps", desc:"Clinical Quality & Safety" },
-  { id:"edu_low",      label:"Low education participation", desc:"Clinical Quality & Safety" },
-  { id:"hae_reduce",   label:"Reducing hospital-acquired events", desc:"Clinical Quality & Safety" },
+  { id:"ebp_gaps",                 label:"Evidence-based practice gaps" },
+  { id:"low_education",            label:"Low education participation" },
+  { id:"hac_reduction",            label:"Reducing hospital-acquired events" },
 ];
 
     // One aligned game per area
