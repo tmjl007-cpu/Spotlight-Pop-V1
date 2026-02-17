@@ -1,0 +1,2039 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Game On: Workforce Impact Challenge</title>
+
+  <style>
+    :root{
+      /* Gratia-inspired palette */
+      --navy:#0B1F4D;
+      --navy-dark:#081735;
+      --magenta:#E6007E;      /* Engage */
+      --blue:#3C8DCC;         /* Motivate */
+      --orange:#F5A623;       /* Perform */
+      --light-blue:#EAF2FA;   /* Card bg */
+      --white:#ffffff;
+
+      --text: var(--navy);
+      --muted:#5F6B8A;
+      --danger:#ff4d6d;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+
+    html, body { height: 100%; }
+
+body{
+  margin:0;
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+  background: radial-gradient(1200px 600px at 50% 20%, #1C4C8F 0%, var(--navy) 60%);
+  color: var(--white);
+
+  /* ✅ don’t center the app vertically */
+  display:block;
+
+  /* ✅ safe area for notches + allow full-height layouts */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+           env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+    .hidden{ display:none !important; }
+
+    /* ---------- Intro Screen ---------- */
+    .screen{
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: radial-gradient(1200px 600px at 50% 20%, #1C4C8F 0%, var(--navy) 60%);
+      padding:24px;
+      z-index: 1200;
+    }
+    .introLogo{
+      display:block;
+      margin:0 auto 22px auto;
+      max-width:280px;
+      width:70%;
+    }
+    .introCard{
+      width:min(760px, 100%);
+      background: rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:22px;
+      padding:34px;
+      text-align:center;
+      box-shadow: 0 25px 80px rgba(0,0,0,.55);
+      backdrop-filter: blur(8px);
+    }
+    .introSubtitle{
+      margin:0 0 10px 0;
+      font-size:12px;
+      color: rgba(255,255,255,.85);
+      letter-spacing:.9px;
+      text-transform:uppercase;
+      font-weight:900;
+    }
+    .introTitle{
+      margin:0;
+      font-size:34px;
+      font-weight:950;
+      letter-spacing:.4px;
+    }
+    .introTagline{
+      margin:14px 0 20px 0;
+      font-size:18px;
+      font-weight:650;
+      color: rgba(255,255,255,.92);
+      line-height:1.25;
+    }
+    .introActions{
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      margin-top:10px;
+      flex-wrap:wrap;
+    }
+
+    /* ---------- Card ---------- */
+    .panel{
+  width:100%;
+  border-radius:18px;
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+
+  /* ✅ fills the viewport */
+  min-height: 100svh;
+
+  background: var(--light-blue);
+  border:1px solid rgba(11,31,77,.12);
+  color: var(--text);
+  box-shadow: 0 10px 26px rgba(0,0,0,.10);
+}
+    .h{
+      font-weight:950;
+      letter-spacing:.2px;
+      margin:0 0 8px 0;
+      font-size:20px;
+      color: var(--navy);
+    }
+    .sub{
+      margin:0 0 14px 0;
+      color: var(--muted);
+      font-size:13px;
+      line-height:1.4;
+    }
+
+    /* ---------- Page 1: Game-only layout ---------- */
+   .gameOnly{
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  min-height: 100svh; /* ✅ iOS-safe viewport height */
+  display:flex;
+}
+
+    .gameHeader{
+      text-align:left;
+      margin-bottom:12px;
+    }
+
+    /* Bubble stage is the hero */
+    .bubbleStage{
+      width: 100%;
+      max-width: 100%;
+      height: 560px;
+      border-radius: 16px;
+      background: radial-gradient(
+  120% 100% at 50% 20%,
+  #142A5C 0%,
+  #0B1F4D 70%,
+  #071332 100%
+);
+
+border: 1px solid rgba(255,255,255,.08);
+box-shadow: inset 0 0 80px rgba(0,0,0,.4);
+
+position: relative;
+overflow: hidden;
+touch-action: manipulation;
+}
+    @media (max-width: 620px){
+      body{ padding:14px; }
+      .bubbleStage{
+        height: 56vh;
+        min-height: 420px;
+      }
+    }
+
+    /* Bubbles */
+    .bubble{
+      position:absolute;
+      left:0; top:0;
+      width: clamp(110px, 30vw, 160px);
+      height: clamp(110px, 30vw, 160px);
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      padding:14px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      background:
+        radial-gradient(circle at 30% 25%,
+          rgba(255,255,255,.95) 0%,
+          rgba(255,255,255,.55) 28%,
+          rgba(60,141,204,.20) 55%,
+          rgba(11,31,77,.10) 100%);
+      border: 2px solid rgba(11,31,77,.18);
+      box-shadow: 0 10px 24px rgba(0,0,0,.10);
+      transform: translate3d(0,0,0);
+      will-change: transform;
+    }
+    .bubble .bTitle{
+      font-weight:950;
+      color: var(--navy);
+      font-size:14px;
+      line-height:1.15;
+    }
+    .bubble .bSub{
+      margin-top:6px;
+      font-weight:850;
+      font-size:11px;
+      color: rgba(11,31,77,.70);
+      line-height:1.25;
+    }
+    .bubble.popping{ animation: pop .22s ease forwards; }
+    @keyframes pop{
+      0%   { transform: scale(1); opacity: 1; }
+      60%  { transform: scale(1.15); opacity: .95; }
+      100% { transform: scale(.2); opacity: 0; }
+    }
+    .bubble.blocked{ animation: nudge .18s ease; }
+    @keyframes nudge{
+      0% { transform: translate3d(0,0,0) scale(1); }
+      40%{ transform: translate3d(6px,0,0) scale(1.02); }
+      100%{ transform: translate3d(0,0,0) scale(1); }
+    }
+/* ✅ FORCE priority color classes to override base .bubble background */
+.bubble.c-px,
+.bubble.c-quality,
+.bubble.c-retention,
+.bubble.c-onboarding,
+.bubble.c-culture,
+.bubble.c-staffing{
+  background: var(--priority-bg) !important;
+  border-color: var(--priority-border) !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,.10), 0 0 0 3px rgba(255,255,255,.35) inset !important;
+}
+
+/* Each priority sets its own variables */
+.bubble.c-px{
+  --priority-bg: radial-gradient(circle at 30% 25%,
+    rgba(255,255,255,.98) 0%,
+    rgba(255,255,255,.62) 18%,
+    rgba(230,0,126,.55) 55%,
+    rgba(230,0,126,.22) 82%,
+    rgba(11,31,77,.08) 100%);
+  --priority-border: rgba(230,0,126,.75);
+}
+
+.bubble.c-quality{
+  --priority-bg: radial-gradient(circle at 30% 25%,
+    rgba(255,255,255,.98) 0%,
+    rgba(255,255,255,.62) 18%,
+    rgba(60,141,204,.60) 55%,
+    rgba(60,141,204,.22) 82%,
+    rgba(11,31,77,.08) 100%);
+  --priority-border: rgba(60,141,204,.78);
+}
+
+.bubble.c-retention{
+  --priority-bg: radial-gradient(circle at 30% 25%,
+    rgba(255,255,255,.98) 0%,
+    rgba(255,255,255,.62) 18%,
+    rgba(245,166,35,.70) 55%,
+    rgba(245,166,35,.25) 82%,
+    rgba(11,31,77,.08) 100%);
+  --priority-border: rgba(245,166,35,.85);
+}
+
+.bubble.c-onboarding{
+  --priority-bg: radial-gradient(circle at 30% 25%,
+    rgba(255,255,255,.98) 0%,
+    rgba(255,255,255,.62) 18%,
+    rgba(124,198,255,.75) 55%,
+    rgba(124,198,255,.28) 82%,
+    rgba(11,31,77,.08) 100%);
+  --priority-border: rgba(124,198,255,.90);
+}
+
+.bubble.c-culture{
+  --priority-bg: radial-gradient(circle at 30% 25%,
+    rgba(255,255,255,.98) 0%,
+    rgba(255,255,255,.62) 18%,
+    rgba(255,102,181,.65) 55%,
+    rgba(255,102,181,.22) 82%,
+    rgba(11,31,77,.08) 100%);
+  --priority-border: rgba(255,102,181,.85);
+}
+
+.bubble.c-staffing{
+  --priority-bg: radial-gradient(circle at 30% 25%,
+    rgba(255,255,255,.98) 0%,
+    rgba(255,255,255,.62) 18%,
+    rgba(255,208,138,.85) 55%,
+    rgba(255,208,138,.28) 82%,
+    rgba(11,31,77,.08) 100%);
+  --priority-border: rgba(255,208,138,.95);
+}
+    /* ✅ Brighter, fixed colors per priority (Gratia-inspired) */
+.bubble.c-px{
+  background: radial-gradient(circle at 30% 25%,
+    rgba(255,255,255,.98) 0%,
+    rgba(255,255,255,.65) 22%,
+    rgba(230,0,126,.35) 55%,
+    rgba(230,0,126,.18) 78%,
+    rgba(11,31,77,.08) 100%);
+  border-color: rgba(230,0,126,.55);
+}
+
+/* ---------- Bubble "explode" particles (BIGGER: dots + stars) ---------- */
+.burst{
+  position:absolute;
+  left:0; top:0;
+  width:10px; height:10px;
+  pointer-events:none;
+  z-index:8; /* above bubble */
+}
+
+/* default particle */
+.burst i{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:10px;          /* bigger */
+  height:10px;         /* bigger */
+  border-radius:999px;
+  transform: translate(-50%,-50%);
+  opacity: 0;
+  animation: burst 700ms cubic-bezier(.16,.84,.25,1) forwards; /* longer + snappier */
+}
+
+.burst i:nth-child(odd){ width:8px; height:8px; }
+.burst i:nth-child(3n){ width:6px; height:6px; }
+
+/* star particle */
+.burst i.star{
+  width:14px;          /* bigger star */
+  height:14px;
+  border-radius:0;
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,.14));
+}
+
+@keyframes burst{
+  0%   { opacity:1; transform: translate(-50%,-50%) scale(1); }
+  70%  { opacity:1; }
+  100% { opacity:0; transform: translate(var(--tx), var(--ty)) scale(.15); }
+}
+
+    /* ✨ Radiant flash glow */
+.radialFlash{
+  position:absolute;
+  width:20px;
+  height:20px;
+  border-radius:999px;
+  transform: translate(-50%,-50%);
+  pointer-events:none;
+  background: radial-gradient(circle,
+    rgba(255,255,255,.9) 0%,
+    rgba(255,255,255,.6) 20%,
+    rgba(255,255,255,.2) 45%,
+    rgba(255,255,255,0) 70%);
+  animation: flashExpand 600ms ease-out forwards;
+  z-index:7;
+}
+
+@keyframes flashExpand{
+  0%{
+    opacity:1;
+    transform: translate(-50%,-50%) scale(1);
+  }
+  100%{
+    opacity:0;
+    transform: translate(-50%,-50%) scale(14);
+  }
+}
+
+    .gameFooter{
+      margin-top:14px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    /* Progress bar */
+    .progressWrap{
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .progressTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-weight:950;
+      color: var(--navy);
+      font-size:13px;
+    }
+    .progressBar{
+      width:100%;
+      height:12px;
+      border-radius:999px;
+      background: rgba(11,31,77,.10);
+      border:1px solid rgba(11,31,77,.12);
+      overflow:hidden;
+    }
+    .progressFill{
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background: linear-gradient(90deg, var(--blue), var(--magenta));
+      transition: width .35s ease;
+    }
+
+    .msg{
+  min-height:28px;
+  text-align:center;
+  font-weight:950;
+  letter-spacing:.4px;
+  transition: all .25s ease;
+}
+
+/* Normal helper text */
+.msg.normal{
+  font-size:13px;
+  color: rgba(255,255,255,.85);
+}
+
+/* BIG completion state */
+.msg.complete{
+  margin-top: 14px;
+  text-align: center;
+
+  font-size: 20px;        /* slightly bigger */
+  font-weight: 950;
+  letter-spacing: .3px;
+
+  /* 👇 HIGH CONTRAST */
+  color: var(--navy);
+
+  /* celebratory highlight band */
+  background: linear-gradient(
+    90deg,
+    rgba(245,166,35,.25),
+    rgba(245,166,35,.45),
+    rgba(245,166,35,.25)
+  );
+
+  padding: 12px 18px;
+  border-radius: 14px;
+
+  box-shadow: 0 8px 24px rgba(0,0,0,.15);
+
+  animation: pulseComplete 1.6s ease-in-out infinite;
+}
+
+@keyframes pulseComplete{
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+    .btnrow{ display:flex; gap:10px; width:100%; }
+
+    button{
+      flex:1;
+      border:none;
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:950;
+      cursor:pointer;
+      background: var(--magenta);
+      border:1px solid rgba(255,255,255,.18);
+      color: var(--white);
+      box-shadow: 0 10px 24px rgba(230,0,126,.18);
+    }
+    button.secondary{
+      background: var(--blue);
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow: 0 10px 24px rgba(60,141,204,.16);
+    }
+    button:disabled{ opacity:.45; cursor:not-allowed; box-shadow:none; }
+
+    /* ---------- Overlays ---------- */
+    .overlay{
+      position:fixed;
+      inset:0;
+      background: rgba(8,23,53,.80);
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      z-index:999;
+      padding:16px 14px;
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+    .modal{
+      width:min(720px, 100%);
+      background: var(--light-blue);
+      border:1px solid rgba(11,31,77,.12);
+      border-radius:18px;
+      padding:22px;
+      text-align:left;
+      box-shadow: 0 18px 60px rgba(0,0,0,.45);
+      color: var(--navy);
+      margin:12px auto;
+      max-height: calc(100vh - 32px);
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+    .modalTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .title{
+      margin:0;
+      font-size:20px;
+      font-weight:950;
+      letter-spacing:.2px;
+      color: var(--navy);
+    }
+    .subtext{
+      margin:6px 0 0 0;
+      color: var(--muted);
+      font-size:13px;
+      line-height:1.4;
+    }
+    .closeBtn{
+      width:auto;
+      flex:0 0 auto;
+      padding:8px 10px;
+      border-radius:12px;
+      background: rgba(255,255,255,.70);
+      border:1px solid rgba(11,31,77,.12);
+      font-weight:950;
+      cursor:pointer;
+      color: var(--navy);
+    }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:14px;
+    }
+    .chip{
+      padding:8px 12px;
+      border-radius:999px;
+      background: rgba(230,0,126,.10);
+      border:2px solid var(--magenta);
+      font-size:12px;
+      font-weight:950;
+      color: var(--navy);
+    }
+
+    .box{
+      margin-top:16px;
+      padding:14px;
+      border-radius:14px;
+      background: rgba(255,255,255,.85);
+      border:1px solid rgba(11,31,77,.10);
+    }
+    .boxtitle{
+      margin:0 0 6px 0;
+      font-size:14px;
+      font-weight:950;
+    }
+    .boxtext{
+      margin:0;
+      color: var(--muted);
+      font-size:13px;
+      line-height:1.45;
+      font-weight:800;
+    }
+
+    .actions{
+      margin-top:18px;
+      display:flex;
+      gap:10px;
+    }
+    .actions button{ flex:1; }
+    .actionsStacked{
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .primaryCta{
+      width:100%;
+      font-size:16px;
+      padding:14px;
+      background: var(--orange);
+      border:none;
+      color:white;
+      box-shadow: 0 8px 22px rgba(245,166,35,.35);
+    }
+    .primaryCta:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 26px rgba(245,166,35,.45);
+    }
+    .subtleBack{
+      width:100%;
+      background: transparent;
+      color: var(--navy);
+      box-shadow: none;
+      border:1px solid rgba(11,31,77,.15);
+    }
+
+    .impactTagline{
+      margin-top:18px;
+      text-align:center;
+      font-size:14px;
+      font-weight:950;
+      color: var(--navy);
+    }
+
+    /* Games grid */
+    .gameGrid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:10px;
+    }
+    @media (max-width: 620px){
+      .gameGrid{ grid-template-columns: 1fr; }
+    }
+    .gameCard{
+      border-radius:16px;
+      padding:14px;
+      background: var(--white);
+      border:1px solid rgba(11,31,77,.10);
+      border-left:6px solid var(--magenta);
+      box-shadow: 0 6px 18px rgba(0,0,0,.08);
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .gameName{
+      font-weight:950;
+      font-size:14px;
+      letter-spacing:.1px;
+      color: var(--navy);
+    }
+    .gameWhy{
+      color: var(--muted);
+      font-size:12px;
+      line-height:1.35;
+      font-weight:800;
+    }
+    .miniTagRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:2px;
+    }
+    .miniTag{
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      background: rgba(60,141,204,.10);
+      border:1px solid rgba(60,141,204,.28);
+      color: var(--navy);
+      font-weight:900;
+    }
+
+    /* Story */
+    .storyCard{
+      margin-top:14px;
+      padding:16px;
+      border-radius:16px;
+      background: rgba(255,255,255,.92);
+      border:1px solid rgba(11,31,77,.10);
+      box-shadow: 0 10px 26px rgba(0,0,0,.10);
+    }
+    .storyKicker{
+      font-size:14px;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      font-weight:950;
+      color: var(--magenta);
+      margin-bottom:12px;
+    }
+    .storyText{
+      color: var(--navy);
+      font-weight:850;
+      font-size:15px;
+      line-height:1.55;
+      white-space:pre-line;
+    }
+
+    /* Lead form */
+    form{ margin-top:14px; }
+    .formGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width: 620px){
+      .formGrid{ grid-template-columns: 1fr; }
+    }
+    .field label{
+      display:block;
+      font-size:12px;
+      color: rgba(11,31,77,.75);
+      margin:0 0 6px 0;
+      font-weight:950;
+    }
+    .field input{
+      width:100%;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(11,31,77,.18);
+      background: rgba(255,255,255,.92);
+      color: var(--navy);
+      outline:none;
+      font-weight:750;
+    }
+    .field input:focus{
+      border-color: rgba(230,0,126,.65);
+      box-shadow: 0 0 0 3px rgba(230,0,126,.14);
+    }
+    .error{
+      margin-top:10px;
+      color:#b0003a;
+      font-size:12px;
+      min-height:16px;
+      font-weight:900;
+    }
+    .success{
+      margin-top:10px;
+      color:#137333;
+      font-size:12px;
+      min-height:16px;
+      font-weight:900;
+    }
+
+    /* Confetti canvas */
+    #confettiCanvas{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:9999;
+    }
+
+    /* Share + Scoreboard bits */
+    .shareRow{
+      margin-top:16px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:14px;
+    }
+    .qrImage{
+      width:120px;
+      height:120px;
+      border-radius:14px;
+      border:2px solid rgba(11,31,77,.18);
+      background:#fff;
+      padding:10px;
+    }
+    .shareButtons{
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .shareBtn{
+      min-width:140px;
+      padding:12px 16px;
+      border-radius:12px;
+      font-weight:900;
+    }
+
+    .conferenceBtn{
+      width:100%;
+      background: var(--orange);
+      border:none;
+      color:white;
+      font-weight:950;
+      box-shadow: 0 10px 26px rgba(245,166,35,.35);
+      animation: subtlePulse 4s ease-in-out infinite;
+    }
+    @keyframes subtlePulse{
+      0%   { box-shadow: 0 10px 26px rgba(245,166,35,.35); }
+      50%  { box-shadow: 0 14px 34px rgba(245,166,35,.55); }
+      100% { box-shadow: 0 10px 26px rgba(245,166,35,.35); }
+    }
+
+    .scoreRow{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin:12px 0;
+    }
+    .scoreTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-weight:900;
+      color: var(--navy);
+      font-size:13px;
+    }
+    .scoreBarWrap{
+      width:100%;
+      height:12px;
+      border-radius:999px;
+      background: rgba(11,31,77,.10);
+      overflow:hidden;
+      border:1px solid rgba(11,31,77,.10);
+    }
+    .scoreBar{
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background: linear-gradient(90deg, var(--orange), var(--magenta));
+      transition: width .6s ease;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+    }
+    .btn.primary{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(90deg,#E6007E,#C6006A);
+      color:white;
+      border:none;
+      border-radius:999px;
+      padding:14px 18px;
+      font-weight:900;
+      cursor:pointer;
+      text-decoration:none;
+      box-shadow:0 6px 16px rgba(230,0,126,.35);
+    }
+    .btn.primary:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 22px rgba(230,0,126,.45);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Confetti canvas -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- Intro Screen -->
+  <div id="introScreen" class="screen" role="dialog" aria-modal="true" aria-label="Intro">
+    <div class="introCard">
+      <img src="./logo.svg" alt="Gratia Health" class="introLogo" />
+      <div class="introSubtitle">Gratia Health presents</div>
+      <h1 class="introTitle">Game On: Workforce Impact Challenge</h1>
+      <div class="introTagline">Healthcare Leaders: What’s Driving Performance in Your System?</div>
+
+      <div class="introActions">
+        <button id="startBtn" type="button">Start the Game</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Container -->
+  <div id="gameContainer" class="hidden">
+    <div class="gameOnly">
+      <div class="panel">
+        <!-- Header -->
+        <div class="gameHeader">
+          <h3 class="h">Pop 3 Priorities That Matter Most</h3>
+          <p class="sub">Tap 3 to unlock your Spotlight.</p>
+        </div>
+
+        <!-- Bubble Stage -->
+        <div id="bubbleStage" class="bubbleStage" aria-label="Pop priorities bubbles"></div>
+
+        <!-- Footer -->
+        <div class="gameFooter">
+          <!-- Progress -->
+          <div class="progressWrap">
+            <div class="progressTop">
+              <div class="progressText" id="progressText">0 / 3 selected</div>
+            </div>
+            <div class="progressBar" role="progressbar" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0">
+              <div class="progressFill" id="progressFill" style="width:0%;"></div>
+            </div>
+          </div>
+
+          <!-- Message -->
+          <div class="msg" id="msg"></div>
+
+          <!-- Buttons -->
+          <div class="btnrow">
+            <button class="secondary" id="resetBtn" type="button">Reset</button>
+            <button id="continueBtn" type="button" disabled>Continue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story Overlay -->
+  <div id="storyOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Story moment">
+    <div class="modal">
+      <div class="modalTop">
+        <div>
+          <h2 class="title">A moment on the floor</h2>
+          <p class="subtext">This is what “visibility” looks like in real life.</p>
+        </div>
+        <button class="closeBtn" id="closeStoryBtn" aria-label="Close story">✕</button>
+      </div>
+
+      <div class="storyCard">
+        <div class="storyKicker" id="storyKicker">Your shift, in the spotlight</div>
+        <div class="storyText" id="storyText"></div>
+      </div>
+
+      <div class="actions actionsStacked">
+        <button id="storyContinueBtn" class="primaryCta" type="button">Continue to your Spotlight</button>
+        <button class="secondary subtleBack" id="storyBackBtn" type="button">Back to game</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Overlay -->
+  <div id="resultsOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Results">
+    <div class="modal">
+      <div class="modalTop">
+        <div>
+          <h2 class="title">Your Spotlight</h2>
+          <p class="subtext">Here’s what you chose — and what we recommend next.</p>
+        </div>
+        <button class="closeBtn" id="closeResultsBtn" aria-label="Close results">✕</button>
+      </div>
+
+      <div class="chips" id="resultsChips"></div>
+
+      <div class="box">
+        <div class="boxtitle" id="recTitle">Recommended focus</div>
+        <p class="boxtext" id="recText"></p>
+      </div>
+
+      <div class="title" style="margin-top:22px;">Gratia games aligned to your priorities</div>
+      <div class="gameGrid" id="gameGrid"></div>
+
+      <div class="actions actionsStacked">
+        <button id="toLeadBtn" class="primaryCta" type="button">Bring this to life in your hospital</button>
+        <button class="secondary subtleBack" id="backBtn" type="button">Adjust priorities</button>
+      </div>
+
+      <div class="impactTagline">Make your staff’s impact visible — and strengthen patient care.</div>
+    </div>
+  </div>
+
+  <!-- Lead Capture Overlay -->
+  <div id="leadOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Lead capture">
+    <div class="modal">
+      <div class="modalTop">
+        <div>
+          <h2 class="title">See this in your hospital</h2>
+          <p class="subtext">We’ll show you how to make your staff’s impact visible — fast.</p>
+        </div>
+        <button class="closeBtn" id="closeLeadBtn" aria-label="Close lead capture">✕</button>
+      </div>
+
+      <div id="leadFormState">
+        <form id="leadForm">
+          <div class="formGrid">
+            <div class="field">
+              <label for="firstName">First name</label>
+              <input id="firstName" name="firstName" autocomplete="given-name" required />
+            </div>
+            <div class="field">
+              <label for="lastName">Last name</label>
+              <input id="lastName" name="lastName" autocomplete="family-name" required />
+            </div>
+            <div class="field">
+              <label for="organization">Organization</label>
+              <input id="organization" name="organization" autocomplete="organization" required />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+            </div>
+            <div class="field">
+              <label for="phone">Phone number</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" required />
+            </div>
+            <div class="field">
+              <label for="role">Role (optional)</label>
+              <input id="role" name="role" autocomplete="organization-title" />
+            </div>
+          </div>
+
+          <div class="error" id="leadError"></div>
+          <div class="success" id="leadSuccess"></div>
+
+          <div class="actions">
+            <button type="submit">Let's explore further</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="thankYouState" class="hidden">
+        <div class="title" style="margin-top:18px; margin-bottom:6px;">You’re all set.</div>
+        <p class="subtext" style="margin-top:0; margin-bottom:14px;">
+          Next step: book time and invite a colleague to explore visibility in action.
+        </p>
+
+        <div class="actions">
+          <a
+            id="bookCallLink"
+            href="https://calendly.com/tim-lafrankie-gratiahealth/gratia-alignment-session"
+            target="_blank"
+            rel="noopener"
+            class="btn primary"
+            style="width:100%;">
+            Book a strategy call
+          </a>
+        </div>
+
+        <div class="actions" style="margin-top:12px;">
+          <button type="button" class="conferenceBtn" id="openScoreBtn">
+            See live conference results
+          </button>
+        </div>
+
+        <div style="margin-top:22px; font-weight:950; color: var(--navy); text-align:center;">
+          Invite a colleague to explore visibility in action
+        </div>
+
+        <div class="shareRow">
+          <img id="shareQr" alt="QR code" class="qrImage" />
+          <div class="shareButtons">
+            <button type="button" class="secondary shareBtn" id="copyLinkBtn">Copy link</button>
+            <button type="button" class="secondary shareBtn" id="startOverBtn">Start over</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Scoreboard Overlay -->
+  <div id="scoreOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Live conference results">
+    <div class="modal">
+      <div class="modalTop">
+        <div>
+          <h2 class="title">Live conference results</h2>
+          <p class="subtext" id="scoreMeta">Loading…</p>
+        </div>
+        <button class="closeBtn" id="closeScoreBtn" aria-label="Close">✕</button>
+      </div>
+
+      <div id="scoreList" style="margin-top:14px;"></div>
+
+      <div class="actions actionsStacked" style="margin-top:18px;">
+        <a
+          id="scoreBookCall"
+          href="https://calendly.com/tim-lafrankie-gratiahealth/gratia-alignment-session"
+          target="_blank"
+          rel="noopener"
+          class="btn primary"
+          style="width:100%;">
+          Book a strategy call
+        </a>
+        <button class="secondary subtleBack" id="refreshScoreBtn" type="button">Refresh</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Config ----------
+    const MAX = 3;
+
+    // Conference Mode Endpoint (only once)
+    const CONFERENCE_ENDPOINT =
+      "https://script.google.com/macros/s/AKfycbxQfYi_Xp3PXd8Jw34YrHAhPVTunJf091kvs-F916MwRUhaLOrYLrKCvVcd5uuncUAP/exec";
+
+    // Your selectable areas
+    const data = [
+      { id:"px",       label:"Patient Experience", desc:"Make everyday moments visible that impact HCAHPS." },
+      { id:"quality",  label:"Quality & Safety",   desc:"Drive consistent behaviors that improve outcomes." },
+      { id:"retention",label:"Retention",         desc:"Keep great nurses and reduce churn." },
+      { id:"onboarding",label:"Onboarding",       desc:"Get new hires productive faster." },
+      { id:"culture",  label:"Team Culture",      desc:"Boost teamwork, recognition, and belonging." },
+      { id:"staffing", label:"Staffing Stability",desc:"Cut contract labor reliance and keep units staffed." },
+    ];
+
+    // One aligned game per area
+    const gameMap = {
+      staffing:   { name: "Shift Pick-Up",        why: "Fill gaps fast, reduce agency.", tags:["Coverage","Speed"] },
+      retention:  { name: "Living Legends",       why: "Recognize top performers, keep them.", tags:["Recognition","Retention"] },
+      quality:    { name: "Care IQ",              why: "Reinforce daily quality behaviors.", tags:["Quality","Behaviors"] },
+      px:         { name: "Compliment Circle",    why: "Boost kindness patients notice.", tags:["PX","Culture"] },
+      culture:    { name: "Compliment Circle",    why: "Create everyday positive visibility.", tags:["Teamwork","Belonging"] },
+      onboarding: { name: "New Hire Navigator",   why: "Accelerate ramp, reduce early churn.", tags:["Onboarding","Ramp"] },
+    };
+
+    // Short “moment on the floor” stories (one per priority)
+    const storyMap = {
+      px: { kicker:"PATIENT EXPERIENCE", text:
+`2:17 p.m.
+A family is anxious at the bedside.
+A nurse pauses, explains, and stays present.
+
+Result:
+An ordinary interaction becomes a moment of trust.
+
+That’s visibility.` },
+      quality: { kicker:"QUALITY & SAFETY", text:
+`6:42 a.m.
+A near-miss is caught before it becomes an event.
+A small check prevents a big consequence.
+
+Result:
+Safe habits become standard practice.
+
+That’s visibility.` },
+      retention: { kicker:"RETENTION", text:
+`End of a long week.
+Your strongest nurse holds the unit steady — again.
+No one asked. They just stepped in.
+
+Result:
+Commitment gets recognized before burnout sets in.
+
+That’s visibility.` },
+      onboarding: { kicker:"ONBOARDING", text:
+`First week on the floor.
+A new hire hesitates before a decision.
+A teammate coaches — and someone notices the growth.
+
+Result:
+Confidence builds faster than doubt.
+
+That’s visibility.` },
+      culture: { kicker:"TEAM CULTURE", text:
+`Shift change.
+One nurse jumps in to help without being asked.
+A quiet assist keeps the team moving.
+
+Result:
+Support becomes the norm, not the exception.
+
+That’s visibility.` },
+      staffing: { kicker:"STAFFING STABILITY", text:
+`4:55 p.m.
+A gap opens for night shift.
+Someone picks it up — because reliability gets seen and rewarded.
+
+Result:
+Coverage stops being last-minute chaos.
+
+That’s visibility.` },
+    };
+
+    // ---------- Element refs ----------
+    const introScreen   = document.getElementById("introScreen");
+    const startBtn      = document.getElementById("startBtn");
+    const gameContainer = document.getElementById("gameContainer");
+
+    const bubbleStage   = document.getElementById("bubbleStage");
+    const msgEl         = document.getElementById("msg");
+    const resetBtn      = document.getElementById("resetBtn");
+    const continueBtn   = document.getElementById("continueBtn");
+    const progressFill  = document.getElementById("progressFill");
+    const progressText  = document.getElementById("progressText");
+
+    const storyOverlay    = document.getElementById("storyOverlay");
+    const storyKickerEl   = document.getElementById("storyKicker");
+    const storyTextEl     = document.getElementById("storyText");
+    const closeStoryBtn   = document.getElementById("closeStoryBtn");
+    const storyContinueBtn= document.getElementById("storyContinueBtn");
+    const storyBackBtn    = document.getElementById("storyBackBtn");
+
+    const resultsOverlay = document.getElementById("resultsOverlay");
+    const resultsChips   = document.getElementById("resultsChips");
+    const recTitleEl     = document.getElementById("recTitle");
+    const recTextEl      = document.getElementById("recText");
+    const gameGrid       = document.getElementById("gameGrid");
+    const closeResultsBtn= document.getElementById("closeResultsBtn");
+    const backBtn        = document.getElementById("backBtn");
+    const toLeadBtn      = document.getElementById("toLeadBtn");
+
+    const leadOverlay    = document.getElementById("leadOverlay");
+    const closeLeadBtn   = document.getElementById("closeLeadBtn");
+    const leadForm       = document.getElementById("leadForm");
+    const leadError      = document.getElementById("leadError");
+    const leadSuccess    = document.getElementById("leadSuccess");
+    const leadFormState  = document.getElementById("leadFormState");
+    const thankYouState  = document.getElementById("thankYouState");
+    const shareQr        = document.getElementById("shareQr");
+    const copyLinkBtn    = document.getElementById("copyLinkBtn");
+    const startOverBtn   = document.getElementById("startOverBtn");
+
+    const scoreOverlay   = document.getElementById("scoreOverlay");
+    const scoreMeta      = document.getElementById("scoreMeta");
+    const scoreList      = document.getElementById("scoreList");
+    const closeScoreBtn  = document.getElementById("closeScoreBtn");
+    const refreshScoreBtn= document.getElementById("refreshScoreBtn");
+    const openScoreBtn   = document.getElementById("openScoreBtn");
+
+    // ---------- State ----------
+    let picked = []; // ids
+    let bubbles = [];
+    let bubbleRAF = null;
+    let bubbleRunning = false;
+
+    // ---------- Helpers ----------
+    function msg(text){ if (msgEl) msgEl.textContent = text || ""; }
+
+    function renderPicked(){
+  const n = picked.length;
+  const pct = Math.round((n / MAX) * 100);
+
+  if (progressFill) progressFill.style.width = pct + "%";
+  if (progressText) progressText.textContent = `${n} / ${MAX} selected`;
+
+  const bar = progressFill?.parentElement;
+  if (bar && bar.getAttribute("role") === "progressbar") {
+    bar.setAttribute("aria-valuenow", String(n));
+  }
+
+  if (continueBtn) continueBtn.disabled = (n !== MAX);
+
+   if (n === 0) {
+    msgEl.className = "msg normal";
+    msg("Tap 3 priorities to unlock your Spotlight.");
+  } 
+  else if (n < MAX) {
+    msgEl.className = "msg normal";
+    msg(`Tap ${MAX - n} more to continue.`);
+  } 
+  else if (n === MAX){
+    msgEl.className = "msg complete";
+    msg("🎯 CHALLENGE COMPLETED — Tap Continue to see your results.");
+  
+    // freeze bubbles so it feels final
+    stopBubbleLoop();
+  
+    // optional: make Continue feel like the main CTA
+    continueBtn.classList.add("ctaPulse");
+  }
+  }
+
+    function addPick(id){
+      if (picked.includes(id)) return;
+
+      if (picked.length >= MAX){
+        msg("Max of 3 — keep popping to continue.");
+        setTimeout(()=>msg("Unlocked. Hit Continue!"), 700);
+        return;
+      }
+
+      picked.push(id);
+      renderPicked();
+    }
+
+    // ---------- Bubble visuals ----------
+    function applyPriorityColor(el, id){
+  el.classList.remove(
+    "v-magenta","v-blue","v-orange",
+    "c-px","c-quality","c-retention",
+    "c-onboarding","c-culture","c-staffing","c-default"
+  );
+
+  const map = {
+    px: "c-px",
+    quality: "c-quality",
+    retention: "c-retention",
+    onboarding: "c-onboarding",
+    culture: "c-culture",
+    staffing: "c-staffing",
+  };
+
+  el.classList.add(map[id] || "c-default");
+}
+   // ✅ One bright color per priority
+const priorityClass = {
+  px:        "c-px",
+  quality:   "c-quality",
+  retention: "c-retention",
+  onboarding:"c-onboarding",
+  culture:   "c-culture",
+  staffing:  "c-staffing",
+};
+
+function applyPriorityColor(el, id){
+  // remove any previous c-* class
+  el.className = el.className.replace(/\bc-\S+\b/g, "").trim();
+  el.classList.add(priorityClass[id] || "c-default");
+}
+
+    function resetBubbles(){
+      bubbles = [];
+      if (bubbleStage) bubbleStage.innerHTML = "";
+    }
+
+    /* ✅ PASTE spawnBubbleById RIGHT HERE (above createBubbles) */
+function spawnBubbleById(id){
+  const item = data.find(d => d.id === id);
+  if (!item || !bubbleStage) return;
+
+  const rect = bubbleStage.getBoundingClientRect();
+  const stageW = rect.width;
+
+  const el = document.createElement("div");
+  el.className = "bubble";
+  applyPriorityColor(el, id);
+  el.dataset.id = id;
+  el.innerHTML = `
+    <div>
+      <div class="bTitle">${item.label}</div>
+      <div class="bSub">Tap to pop</div>
+    </div>
+  `;
+
+  const size = Math.min(160, Math.max(115, stageW * 0.28));
+  const x = Math.random() * Math.max(1, (stageW - size));
+  const y = - (80 + Math.random()*220);
+  const speed = 0.35 + Math.random() * 0.35;
+
+  const bObj = { id, el, x, y, size, speed, popped:false };
+
+  const pop = () => { unlockAudio(); handleBubblePop(bObj); };
+  el.addEventListener("click", pop);
+  el.addEventListener("touchend", (e)=>{ e.preventDefault(); pop(); }, { passive:false });
+
+  bubbleStage.appendChild(el);
+  bubbles.push(bObj);
+}
+    function createBubbles(){
+      if (!bubbleStage) return;
+
+      resetBubbles();
+
+      const stageRect = bubbleStage.getBoundingClientRect();
+      const stageW = stageRect.width;
+
+      data.forEach((item) => {
+        const el = document.createElement("div");
+        el.className = "bubble";
+        applyPriorityColor(el, item.id);
+        el.dataset.id = item.id;
+        el.innerHTML = `
+          <div>
+            <div class="bTitle">${item.label}</div>
+            <div class="bSub">Tap to pop</div>
+          </div>
+        `;
+
+        // size tied to stage width (keeps it usable on iPhone)
+        const size = Math.min(160, Math.max(115, stageW * 0.28));
+        const pad = 14;
+
+        // Find a non-overlapping start pos (rejection sampling)
+        let x = 0, y = 0, tries = 0;
+        const overlaps = (nx, ny) => {
+          for (const other of bubbles){
+            if (other.popped) continue;
+            const dx = (nx + size/2) - (other.x + other.size/2);
+            const dy = (ny + size/2) - (other.y + other.size/2);
+            const dist = Math.hypot(dx, dy);
+            const minDist = (size/2 + other.size/2 + pad);
+            if (dist < minDist) return true;
+          }
+          return false;
+        };
+
+        do {
+          x = Math.random() * Math.max(1, (stageW - size));
+          y = - (60 + Math.random() * 260); // -60 to about -320
+          tries++;
+        } while (overlaps(x, y) && tries < 60);
+
+        const speed = 0.35 + Math.random() * 0.35; // slow-ish
+
+        const b = { id: item.id, el, x, y, size, speed, popped:false };
+
+       const pop = () => {
+  unlockAudio();     // ✅ first user gesture unlocks audio on iPhone
+  handleBubblePop(b);
+};
+
+el.addEventListener("click", pop);
+el.addEventListener("touchend", (e)=>{ e.preventDefault(); pop(); }, { passive:false });
+
+        bubbleStage.appendChild(el);
+        bubbles.push(b);
+      });
+
+      startBubbleLoop();
+    }
+
+    function startBubbleLoop(){
+      if (bubbleRunning) return;
+      bubbleRunning = true;
+
+      const tick = () => {
+        if (!bubbleRunning) return;
+
+        const rect = bubbleStage.getBoundingClientRect();
+        const stageW = rect.width;
+        const stageH = rect.height;
+
+        for (const b of bubbles){
+          if (b.popped) continue;
+
+          b.y += b.speed * 1.35;
+
+          // recycle at bottom
+          if (b.y > stageH + 40){
+            b.y = - (Math.random() * 260 + 120);
+
+            // pick a fresh x (avoid stacking)
+            let nx = 0;
+            let t = 0;
+            do {
+              nx = Math.random() * Math.max(1, (stageW - b.size));
+              t++;
+            } while (
+              t < 25 &&
+              bubbles.some(o =>
+                o !== b && !o.popped &&
+                Math.abs((nx + b.size/2) - (o.x + o.size/2)) < (b.size * 0.75)
+              )
+            );
+
+            b.x = nx;
+          }
+
+          b.el.style.transform = `translate3d(${b.x}px, ${b.y}px, 0)`;
+        }
+
+        bubbleRAF = requestAnimationFrame(tick);
+      };
+
+      bubbleRAF = requestAnimationFrame(tick);
+    }
+
+    function stopBubbleLoop(){
+      bubbleRunning = false;
+      if (bubbleRAF) cancelAnimationFrame(bubbleRAF);
+      bubbleRAF = null;
+    }
+/* ---------- iPhone-safe POP SOUND ---------- */
+let audioUnlocked = false;
+let popCtx = null;
+
+function unlockAudio(){
+  if (audioUnlocked) return;
+  audioUnlocked = true;
+
+  try{
+    popCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // iOS needs resume in a user gesture
+    if (popCtx.state === "suspended") popCtx.resume();
+  }catch(e){
+    popCtx = null;
+  }
+}
+
+function playPop(){
+  if (!popCtx) return;
+
+  const now = popCtx.currentTime;
+
+  // --- Sharp crack (high snap) ---
+  const snap = popCtx.createOscillator();
+  const snapGain = popCtx.createGain();
+
+  snap.type = "square";
+  snap.frequency.setValueAtTime(600, now);
+  snap.frequency.exponentialRampToValueAtTime(120, now + 0.05);
+
+  snapGain.gain.setValueAtTime(0.0001, now);
+  snapGain.gain.exponentialRampToValueAtTime(0.6, now + 0.005); // louder
+  snapGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+
+  snap.connect(snapGain);
+  snapGain.connect(popCtx.destination);
+
+  snap.start(now);
+  snap.stop(now + 0.1);
+
+
+  // --- Low thump body ---
+  const thump = popCtx.createOscillator();
+  const thumpGain = popCtx.createGain();
+
+  thump.type = "triangle";
+  thump.frequency.setValueAtTime(120, now);
+  thump.frequency.exponentialRampToValueAtTime(60, now + 0.12);
+
+  thumpGain.gain.setValueAtTime(0.0001, now);
+  thumpGain.gain.exponentialRampToValueAtTime(0.4, now + 0.02);
+  thumpGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+
+  thump.connect(thumpGain);
+  thumpGain.connect(popCtx.destination);
+
+  thump.start(now);
+  thump.stop(now + 0.2);
+}
+
+/* ---------- Burst (BIGGER + RADIANT: dots + stars + flash) ---------- */
+function explodeAt(x, y, variantClass){
+  if (!bubbleStage) return;
+
+  // ---------- particle burst ----------
+  const burst = document.createElement("div");
+  burst.className = "burst";
+  burst.style.left = x + "px";
+  burst.style.top  = y + "px";
+
+  // colors based on bubble class (priority color)
+  let colors = ["#E6007E","#3C8DCC","#F5A623","#FFFFFF"]; // fallback
+
+  if (variantClass === "c-px")        colors = ["#E6007E","#FF4FB2","#FFFFFF"];
+  if (variantClass === "c-quality")   colors = ["#3C8DCC","#6FC8FF","#FFFFFF"];
+  if (variantClass === "c-retention") colors = ["#F5A623","#FFD36E","#FFFFFF"];
+  if (variantClass === "c-onboarding")colors = ["#7CC6FF","#BDE7FF","#FFFFFF"];
+  if (variantClass === "c-culture")   colors = ["#FF66B5","#FFA3D2","#FFFFFF"];
+  if (variantClass === "c-staffing")  colors = ["#FFD08A","#FFE3B8","#FFFFFF"];
+
+  const count = 60; // 🔥 more particles
+
+  for (let i=0;i<count;i++){
+    const p = document.createElement("i");
+
+    // every 5th particle is a star ⭐️
+    if (i % 5 === 0) p.classList.add("star");
+
+    const angle = (Math.PI * 2) * (i / count) + (Math.random()*0.5);
+    const dist  = 110 + Math.random()*140; // 🔥 bigger radius
+    const tx = Math.cos(angle) * dist;
+    const ty = Math.sin(angle) * dist;
+
+    p.style.setProperty("--tx", tx + "px");
+    p.style.setProperty("--ty", ty + "px");
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+
+    burst.appendChild(p);
+  }
+
+  bubbleStage.appendChild(burst);
+
+  // ---------- radiant flash ----------
+  const flash = document.createElement("div");
+  flash.className = "radialFlash";
+  flash.style.left = x + "px";
+  flash.style.top  = y + "px";
+  bubbleStage.appendChild(flash);
+
+  setTimeout(()=>{
+    burst.remove();
+    flash.remove();
+  }, 900);
+}
+function handleBubblePop(b){
+  if (b.popped) return;
+  if (picked.includes(b.id)) return;
+
+  if (picked.length >= MAX){
+    const removed = picked.shift();
+    picked.push(b.id);
+    renderPicked();
+
+    spawnBubbleById(removed);
+
+    msg("Replaced your oldest priority.");
+    setTimeout(()=>msg("Unlocked. Hit Continue!"), 800);
+
+  } else {
+    addPick(b.id);
+  }
+
+  // unlock + pop sound
+  unlockAudio();
+  playPop();
+
+  // explode at bubble center
+  const r = b.el.getBoundingClientRect();
+  const sr = bubbleStage.getBoundingClientRect();
+  const cx = (r.left - sr.left) + r.width/2;
+  const cy = (r.top  - sr.top)  + r.height/2;
+
+  let variant = "";
+  if (b.el.classList.contains("c-px")) variant = "c-px";
+  if (b.el.classList.contains("c-quality")) variant = "c-quality";
+  if (b.el.classList.contains("c-retention")) variant = "c-retention";
+  if (b.el.classList.contains("c-onboarding")) variant = "c-onboarding";
+  if (b.el.classList.contains("c-culture")) variant = "c-culture";
+  if (b.el.classList.contains("c-staffing")) variant = "c-staffing";
+
+  explodeAt(cx, cy, variant);
+
+  b.popped = true;
+  b.el.classList.add("popping");
+
+  setTimeout(()=>{
+    if (b.el && b.el.parentNode) b.el.parentNode.removeChild(b.el);
+  }, 240);
+}
+    // ✅ CLOSE handleBubblePop(b) RIGHT HERE
+
+function resetGame(){
+  picked = [];
+  renderPicked();
+  msg("");
+  stopBubbleLoop();
+  createBubbles();
+}
+
+    // ---------- Story / Results / Lead ----------
+    function showStory(){
+      stopBubbleLoop();
+      const key = picked[picked.length - 1] || picked[0];
+      const s = storyMap[key] || {
+        kicker:"Activate visibility",
+        text:`Everyday moments matter.\nWhen they’re visible, they get reinforced.\nAnd the culture shifts—fast.`
+      };
+      storyKickerEl.textContent = s.kicker;
+      storyTextEl.textContent = s.text;
+      storyOverlay.classList.remove("hidden");
+    }
+
+    function closeStory(){ storyOverlay.classList.add("hidden"); }
+
+    function generateRecommendation(ids){
+      const has = (x)=>ids.includes(x);
+
+      if (has("staffing") && has("retention")){
+        return {
+          title: "Recommended focus: staffing + retention",
+          text: "Pair staffing support with recognition loops so units stabilize quickly and top performers stay visible."
+        };
+      }
+      if (has("quality") && (has("px") || has("culture"))){
+        return {
+          title: "Recommended focus: quality + experience",
+          text: "Tie daily behaviors to visible recognition so leaders reinforce what ‘great’ looks like in real time."
+        };
+      }
+      if (has("onboarding") && has("culture")){
+        return {
+          title: "Recommended focus: faster ramp + belonging",
+          text: "Use onboarding moments to build connection early, then keep momentum with lightweight, shift-friendly recognition."
+        };
+      }
+      if (has("quality")){
+        return {
+          title: "Recommended focus: measurable behaviors",
+          text: "Anchor on a clear set of behaviors and make them visible daily so leaders can reinforce and replicate what works."
+        };
+      }
+      return {
+        title: "Recommended focus: activate visibility",
+        text: "Your priorities benefit from making everyday moments visible and reinforcing the right behaviors consistently."
+      };
+    }
+
+    function showResults(){
+      resultsChips.innerHTML = picked.map(id => {
+        const item = data.find(x=>x.id===id);
+        return `<div class="chip">${item ? item.label : id}</div>`;
+      }).join("");
+
+      const rec = generateRecommendation(picked);
+      recTitleEl.textContent = rec.title;
+      recTextEl.textContent = rec.text;
+
+      gameGrid.innerHTML = picked.map(id=>{
+        const gm = gameMap[id] || { name:"Gratia Game", why:"Aligned to your selected priority.", tags:[] };
+        const tags = (gm.tags || []).slice(0,3).map(t=>`<span class="miniTag">${t}</span>`).join("");
+        return `
+          <div class="gameCard">
+            <div class="gameName">${gm.name}</div>
+            <div class="gameWhy">${gm.why}</div>
+            <div class="miniTagRow">${tags}</div>
+          </div>
+        `;
+      }).join("");
+
+      resultsOverlay.classList.remove("hidden");
+    }
+
+    function closeResults(){ resultsOverlay.classList.add("hidden"); }
+
+    function showLead(){
+      resultsOverlay.classList.add("hidden");
+      leadOverlay.classList.remove("hidden");
+      leadError.textContent = "";
+      leadSuccess.textContent = "";
+    }
+
+    function closeLead(){ leadOverlay.classList.add("hidden"); }
+
+    function validateLeadForm(fd){
+      const required = ["firstName","lastName","organization","email","phone"];
+      for (const k of required){
+        if (!String(fd.get(k) || "").trim()) {
+          return `Please enter your ${k.replace(/([A-Z])/g," $1").toLowerCase()}.`;
+        }
+      }
+      const email = String(fd.get("email") || "").trim();
+      if (!/^\S+@\S+\.\S+$/.test(email)) return "Please enter a valid email address.";
+      return null;
+    }
+
+    // ---------- Scoreboard ----------
+    async function loadScoreboard(){
+      scoreMeta.textContent = "Loading…";
+      scoreList.innerHTML = "";
+
+      try{
+        const url = CONFERENCE_ENDPOINT + "?action=stats&t=" + Date.now();
+        const res = await fetch(url, { method:"GET", cache:"no-store" });
+        const raw = await res.text();
+
+        if (!res.ok) throw new Error("HTTP " + res.status);
+
+        let json;
+        try{ json = JSON.parse(raw); }
+        catch(_){ throw new Error("Not JSON (likely login/HTML). Check Apps Script access."); }
+
+        const summary = Array.isArray(json.summary) ? json.summary : [];
+        const total = summary.reduce((sum, row)=> sum + Number(row.count || 0), 0);
+
+        scoreMeta.textContent = total ? `${total} responses today` : "No responses yet";
+
+        scoreList.innerHTML = summary.map(row=>{
+          const c = Number(row.count || 0);
+          const pct = total ? Math.round((c/total)*100) : 0;
+          return `
+            <div class="scoreRow">
+              <div class="scoreTop">
+                <span>${row.label || row.id}</span>
+                <span>${pct}%</span>
+              </div>
+              <div class="scoreBarWrap">
+                <div class="scoreBar" style="width:${pct}%;"></div>
+              </div>
+            </div>
+          `;
+        }).join("");
+
+      }catch(err){
+        console.error("Scoreboard load failed:", err);
+        scoreMeta.textContent = "Couldn’t load results.";
+        scoreList.innerHTML = `
+          <div class="box">
+            <div class="boxtitle">Troubleshooting</div>
+            <p class="boxtext">
+              ${String(err.message || err)}
+              <br><br>
+              Most common fix: Apps Script Web App must be deployed to <b>Anyone</b> access.
+            </p>
+          </div>
+        `;
+      }
+    }
+
+    // ---------- Confetti ----------
+    function burstConfetti(){
+      const canvas = document.getElementById("confettiCanvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      canvas.style.display = "block";
+      canvas.style.position = "fixed";
+      canvas.style.inset = "0";
+      canvas.style.pointerEvents = "none";
+      canvas.style.zIndex = "99999";
+
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+
+      const colors = ["#E6007E","#3C8DCC","#F5A623","#FFFFFF"];
+      const pieces = [];
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight * 0.45;
+
+      const count = 240;
+      const gravity = 0.12;
+      const drag = 0.992;
+
+      for (let i=0;i<count;i++){
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 6 + Math.random()*10;
+        pieces.push({
+          x: centerX,
+          y: centerY,
+          vx: Math.cos(angle)*speed + (Math.random()*2-1),
+          vy: Math.sin(angle)*speed - (Math.random()*3),
+          w: 6 + Math.random()*8,
+          h: 3 + Math.random()*6,
+          rot: Math.random()*Math.PI,
+          vr: (Math.random()*0.2 - 0.1),
+          color: colors[Math.floor(Math.random()*colors.length)],
+          life: 0,
+          maxLife: 70 + Math.floor(Math.random()*30)
+        });
+      }
+
+      let frame = 0;
+      function tick(){
+        frame++;
+        ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+
+        for (const p of pieces){
+          p.vx *= drag;
+          p.vy = p.vy*drag + gravity;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+          p.life++;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+          ctx.restore();
+        }
+
+        const alive = pieces.some(p => p.life < p.maxLife && p.y < window.innerHeight + 40);
+        if (alive && frame < 120) requestAnimationFrame(tick);
+        else ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // ---------- Start Game (iPhone-safe) ----------
+    function startGame(e){
+      if (e) { try{ e.preventDefault(); }catch(_){} }
+
+      introScreen.classList.add("hidden");
+      gameContainer.classList.remove("hidden");
+      window.scrollTo(0,0);
+
+      // wait a frame so bubbleStage has layout (important on iOS)
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          renderPicked();
+          createBubbles();
+        });
+      });
+    }
+
+    // ---------- Wire up events ----------
+    // Start
+    startBtn.addEventListener("click", startGame);
+    startBtn.addEventListener("touchend", (e)=>{ e.preventDefault(); startGame(e); }, { passive:false });
+
+    // Reset
+    resetBtn.addEventListener("click", resetGame);
+
+    // Continue -> Story
+    continueBtn.addEventListener("click", showStory);
+
+    // Story controls
+    closeStoryBtn.addEventListener("click", closeStory);
+    storyBackBtn.addEventListener("click", closeStory);
+    storyContinueBtn.addEventListener("click", () => {
+      closeStory();
+      showResults();
+      requestAnimationFrame(() => requestAnimationFrame(burstConfetti));
+    });
+
+    // Results controls
+    closeResultsBtn.addEventListener("click", () => { closeResults(); startBubbleLoop(); });
+    backBtn.addEventListener("click", () => { closeResults(); startBubbleLoop(); });
+    toLeadBtn.addEventListener("click", showLead);
+
+    // Lead controls
+    closeLeadBtn.addEventListener("click", closeLead);
+
+    // Scoreboard controls
+    if (openScoreBtn){
+      openScoreBtn.addEventListener("click", ()=>{
+        scoreOverlay.classList.remove("hidden");
+        setTimeout(loadScoreboard, 50);
+      });
+    }
+    closeScoreBtn.addEventListener("click", ()=> scoreOverlay.classList.add("hidden"));
+    refreshScoreBtn.addEventListener("click", loadScoreboard);
+
+    // Click-outside closes overlays
+    [storyOverlay, resultsOverlay, leadOverlay, scoreOverlay].forEach(ov=>{
+      ov.addEventListener("click", (e)=>{
+        if (e.target === ov) ov.classList.add("hidden");
+      });
+    });
+
+    // ESC closes topmost overlay
+    window.addEventListener("keydown", (e)=>{
+      if (e.key !== "Escape") return;
+      if (!scoreOverlay.classList.contains("hidden")) return scoreOverlay.classList.add("hidden");
+      if (!leadOverlay.classList.contains("hidden")) return closeLead();
+      if (!resultsOverlay.classList.contains("hidden")) return closeResults();
+      if (!storyOverlay.classList.contains("hidden")) return closeStory();
+    });
+
+    // Lead submit
+    leadForm.addEventListener("submit", (e)=>{
+      e.preventDefault();
+      leadError.textContent = "";
+      leadSuccess.textContent = "";
+
+      const fd = new FormData(leadForm);
+      const err = validateLeadForm(fd);
+      if (err){ leadError.textContent = err; return; }
+
+      const payload = {
+        picks: picked.slice(),
+        picks_labels: picked.map(id => (data.find(x=>x.id===id) || {}).label).filter(Boolean),
+        aligned_games: picked.map(id => (gameMap[id] || {}).name).filter(Boolean),
+        firstName: fd.get("firstName"),
+        lastName: fd.get("lastName"),
+        organization: fd.get("organization"),
+        email: fd.get("email"),
+        phone: fd.get("phone"),
+        role: fd.get("role"),
+        createdAt: new Date().toISOString(),
+      };
+
+      // Conference Mode POST to Google Apps Script
+      payload.sessionId = payload.sessionId || (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + Math.random().toString(16).slice(2));
+      payload.device = navigator.userAgent;
+
+      fetch(CONFERENCE_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload),
+      })
+      .then(r => r.json())
+      .then(res => console.log("Conference POST:", res))
+      .catch(err => console.warn("Conference POST failed:", err));
+
+      // QR share
+      const shareUrl = window.location.href.split("#")[0];
+      if (shareQr){
+        shareQr.src = "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" + encodeURIComponent(shareUrl);
+      }
+
+      leadFormState.classList.add("hidden");
+      thankYouState.classList.remove("hidden");
+    });
+
+    // Copy link button (iPhone/Safari safe)
+    if (copyLinkBtn){
+      copyLinkBtn.addEventListener("click", ()=>{
+        const urlToShare = window.location.href.split("#")[0];
+
+        const showCopied = ()=>{
+          const prev = copyLinkBtn.textContent;
+          copyLinkBtn.textContent = "Copied!";
+          setTimeout(()=>copyLinkBtn.textContent = prev || "Copy link", 1200);
+        };
+
+        if (navigator.clipboard && window.isSecureContext){
+          navigator.clipboard.writeText(urlToShare)
+            .then(showCopied)
+            .catch(()=>fallbackCopy(urlToShare));
+          return;
+        }
+
+        fallbackCopy(urlToShare);
+
+        function fallbackCopy(text){
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.setAttribute("readonly", "");
+          ta.style.position = "fixed";
+          ta.style.top = "-1000px";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          ta.setSelectionRange(0, ta.value.length);
+
+          let ok = false;
+          try{ ok = document.execCommand("copy"); }catch(e){ ok = false; }
+          document.body.removeChild(ta);
+
+          if (ok) showCopied();
+          else prompt("Copy this link:", text);
+        }
+      });
+    }
+
+    // Start over
+    if (startOverBtn){
+      startOverBtn.addEventListener("click", ()=>{
+        picked = [];
+        renderPicked();
+
+        // close overlays
+        leadOverlay.classList.add("hidden");
+        resultsOverlay.classList.add("hidden");
+        storyOverlay.classList.add("hidden");
+        scoreOverlay.classList.add("hidden");
+
+        // reset lead UI
+        thankYouState.classList.add("hidden");
+        leadFormState.classList.remove("hidden");
+        leadForm.reset();
+        leadError.textContent = "";
+        leadSuccess.textContent = "";
+
+        // return to intro
+        introScreen.classList.remove("hidden");
+        gameContainer.classList.add("hidden");
+
+        stopBubbleLoop();
+        resetBubbles();
+      });
+    }
+
+    // init
+    renderPicked();
+  </script>
+</body>
+</html>
