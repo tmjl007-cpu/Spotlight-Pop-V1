@@ -506,18 +506,20 @@ touch-action: manipulation;
 
     .btnrow{ display:flex; gap:10px; width:100%; }
 
-    button{
-      flex:1;
-      border:none;
-      border-radius:12px;
-      padding:10px 12px;
-      font-weight:950;
-      cursor:pointer;
-      background: var(--magenta);
-      border:1px solid rgba(255,255,255,.18);
-      color: var(--white);
-      box-shadow: 0 10px 24px rgba(230,0,126,.18);
-    }
+    /* ✅ only buttons inside rows should flex */
+.btnrow button,
+.actions button{
+  flex:1;
+  border:none;
+  border-radius:12px;
+  padding:10px 12px;
+  font-weight:950;
+  cursor:pointer;
+  background: var(--magenta);
+  border:1px solid rgba(255,255,255,.18);
+  color: var(--white);
+  box-shadow: 0 10px 24px rgba(230,0,126,.18);
+}
     button.secondary{
       background: var(--blue);
       border:1px solid rgba(255,255,255,.18);
