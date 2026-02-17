@@ -103,7 +103,8 @@ body{
   flex-direction:column;
   align-items:center;
   justify-content:flex-end;
-  padding-bottom:44px;   /* 👈 controls how low it sits */
+
+  padding-bottom: calc(30px + env(safe-area-inset-bottom));
   pointer-events:none;
 }
 
