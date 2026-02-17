@@ -891,9 +891,16 @@ touch-action: manipulation;
       box-shadow:0 6px 16px rgba(230,0,126,.35);
     }
     .btn.primary:hover{
-      transform:translateY(-2px);
-      box-shadow:0 8px 22px rgba(230,0,126,.45);
-    }
+  transform:translateY(-2px);
+  box-shadow:0 8px 22px rgba(230,0,126,.45);
+}
+
+/* 📱 iPhone / small screen adjustment */
+@media (max-width: 600px){
+  .introOverlay{
+    padding-bottom: 110px;  /* adjust this number if needed */
+  }
+}
   </style>
 </head>
 
