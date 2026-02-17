@@ -57,18 +57,19 @@ body{
 .introHero{
   position:relative;
   width:100%;
-  max-width:900px;
-  aspect-ratio: 9 / 16;
-  border-radius:24px;
+  height:100svh;          /* true mobile viewport height */
+  display:flex;
+  align-items:center;
+  justify-content:center;
   overflow:hidden;
 }
 /* ✅ Background image version (more reliable than <img>) */
 .introHeroBg{
   background-image: url("/Spotlight-Pop-V1/spotlight-pop.jpg");
-  background-size: contain;   /* show full image */
+  background-size: contain;       /* show full artwork */
   background-position: center;
   background-repeat: no-repeat;
-  background-color: #081735;  /* fill empty space nicely */
+  background-color:#081735;       /* fill side gaps cleanly */
 }
 /* Desktop tweak */
 
@@ -101,14 +102,15 @@ body{
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:flex-end;
-  padding:22px 18px 26px 18px;
-  gap:16px;
-  text-align:center;
+  justify-content:center;
+transform: translateY(140px);
+  pointer-events:none;        /* prevents overlay blocking image */
 }
 
 /* Start button */
 .startHeroBtn{
+  pointer-events:auto;
+  
   width:min(520px, 92%);
   border:none;
   border-radius:999px;
