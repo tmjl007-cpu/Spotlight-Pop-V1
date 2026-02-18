@@ -980,11 +980,40 @@ touch-action: manipulation;
       text-decoration:none;
       box-shadow:0 6px 16px rgba(230,0,126,.35);
     }
+    /* Blue secondary strategic button */
+.primaryBlue{
+  background: linear-gradient(90deg, var(--blue), #2E7CB8);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 18px;
+  font-weight: 900;
+  box-shadow: 0 6px 16px rgba(60,141,204,.35);
+}
+
+.primaryBlue:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(60,141,204,.45);
+}
     .btn.primary:hover{
   transform:translateY(-2px);
   box-shadow:0 8px 22px rgba(230,0,126,.45);
 }
+/* Utility buttons (Copy link / Start over) */
+.utilityBtn{
+  background: white;
+  color: var(--blue);
+  border: 2px solid var(--blue);
+  box-shadow: none;
+  font-weight: 900;
+  border-radius: 12px;
+  padding: 12px 16px;
+  transition: all .15s ease;
+}
 
+.utilityBtn:hover{
+  background: rgba(60,141,204,.08);
+}
 /* 📱 iPhone / small screen adjustment */
 @media (max-width: 600px){
   .introOverlay{
@@ -1147,9 +1176,9 @@ touch-action: manipulation;
         </div>
 
         <div class="actions" style="margin-top:12px;">
-          <button type="button" class="conferenceBtn" id="openScoreBtn">
-            See How You Stack Up
-          </button>
+          <button type="button" class="btn secondary primaryBlue" id="openScoreBtn">
+  See How You Stack Up
+</button>
         </div>
 
         <div style="margin-top:22px; font-weight:950; color: var(--navy); text-align:center;">
@@ -1159,8 +1188,8 @@ touch-action: manipulation;
         <div class="shareRow">
           <img id="shareQr" alt="QR code" class="qrImage" />
           <div class="shareButtons">
-            <button type="button" class="secondary shareBtn" id="copyLinkBtn">Copy link</button>
-            <button type="button" class="secondary shareBtn" id="startOverBtn">Start over</button>
+            <button type="button" class="utilityBtn shareBtn" id="copyLinkBtn">Copy link</button>
+<button type="button" class="utilityBtn shareBtn" id="startOverBtn">Start over</button>
           </div>
         </div>
       </div>
