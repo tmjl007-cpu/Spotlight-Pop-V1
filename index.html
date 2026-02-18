@@ -1611,7 +1611,7 @@ el.addEventListener("touchend", (e)=>{ e.preventDefault(); pop(); }, { passive:f
       if (b.popped) continue;
 
       // vertical fall
-      b.y += b.speed * 0.9;
+      b.y += b.speed *1.01;
 
       // horizontal drift
       b.x += b.drift;
