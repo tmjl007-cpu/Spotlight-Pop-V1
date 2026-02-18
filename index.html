@@ -1079,11 +1079,11 @@ touch-action: manipulation;
   <!-- Lead Capture Overlay -->
   <div id="leadOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Lead capture">
     <div class="modal">
-      <div class="modalTop">
+    <div id="leadHeader" class="modalTop">
   <div>
-    <h2 class="title">You’re all set.</h2>
+    <h2 class="title">Your Custom Game Plan Awaits</h2>
     <p class="subtext">
-      Next step: book time and invite a colleague to explore visibility in action.
+      Tell us where to send your tailored strategy overview.
     </p>
   </div>
   <button class="closeBtn" id="closeLeadBtn" aria-label="Close lead capture">✕</button>
@@ -2124,6 +2124,8 @@ continueBtn.addEventListener("click", () => {
 
       leadFormState.classList.add("hidden");
       thankYouState.classList.remove("hidden");
+      // 🔥 hide the top header after submission
+document.getElementById("leadHeader").classList.add("hidden");
     });
 
     // Copy link button (iPhone/Safari safe)
