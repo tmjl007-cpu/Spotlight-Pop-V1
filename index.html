@@ -1858,13 +1858,18 @@ gameGrid.innerHTML = uniqueGames.map(id=>{
 
     function closeResults(){ resultsOverlay.classList.add("hidden"); }
 
-   function showLead(){
+  function showLead(){
+  // hide results, show lead overlay
+  resultsOverlay.classList.add("hidden");
+  leadOverlay.classList.remove("hidden");
 
-  // ✅ ensure lead starts in "form mode"
+  // ensure lead starts in "form mode"
   document.getElementById("leadHeader").classList.remove("hidden");
   leadFormState.classList.remove("hidden");
   thankYouState.classList.add("hidden");
 
+  // clean state (optional but nice)
+  leadForm.reset();
   leadError.textContent = "";
   leadSuccess.textContent = "";
 }
