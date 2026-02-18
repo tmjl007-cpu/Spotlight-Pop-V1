@@ -710,15 +710,20 @@ touch-action: manipulation;
 }
 
 @media (min-width: 900px){
+
   .gameGrid{
-    justify-items: center;   /* center cards horizontally */
+    display: flex;               /* override grid */
+    flex-direction: column;      /* stack vertically */
+    align-items: center;         /* center everything */
+    gap: 16px;                   /* slightly more spacing */
   }
 
   .gameCard{
-    width: 70%;              /* slightly narrower */
-    max-width: 460px;        /* keeps it elegant */
-    padding: 10px 14px;      /* 👈 ADD THIS LINE */
+    width: 65%;                  /* tighter width */
+    max-width: 480px;            /* elegant cap */
+    padding: 14px 18px;          /* balanced padding */
   }
+
 }
     /* Game icon row */
 .gameRow{
