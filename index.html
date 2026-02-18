@@ -1615,10 +1615,14 @@ el.addEventListener("touchend", (e)=>{ e.preventDefault(); pop(); }, { passive:f
 
       // horizontal drift
       b.x += b.drift;
+      
+      // clamp drift so it never grows over time
+const MAX_DRIFT = 0.6; // tweak 0.4–0.8
+b.drift = Math.max(-MAX_DRIFT, Math.min(MAX_DRIFT, b.drift));
 
       // bounce off left/right edges (slightly more energetic)
       if (b.x <= 0 || b.x + b.size >= stageW) {
-        b.drift *= -1.15;
+        b.drift *= -1;
       }
 
       // clamp on-screen
