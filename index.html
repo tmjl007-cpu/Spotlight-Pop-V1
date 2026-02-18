@@ -701,17 +701,22 @@ touch-action: manipulation;
       color: var(--navy);
     }
 
-    /* Games grid */
-    .gameGrid{
+/* Games grid */
+.gameGrid{
   margin-top:14px;
   display:grid;
-  grid-template-columns: 1fr;   /* default = stacked */
+  grid-template-columns: 1fr;   /* always stacked */
   gap:10px;
 }
 
 @media (min-width: 900px){
   .gameGrid{
-    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;   /* center cards horizontally */
+  }
+
+  .gameCard{
+    width: 80%;              /* slightly narrower */
+    max-width: 520px;        /* keeps it elegant */
   }
 }
     /* Game icon row */
