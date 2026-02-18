@@ -1564,78 +1564,80 @@ el.addEventListener("touchend", (e)=>{ e.preventDefault(); pop(); }, { passive:f
     }
 
     function startBubbleLoop(){
-      if (bubbleRunning) return;
-      bubbleRunning = true;
+  if (bubbleRunning) return;
+  bubbleRunning = true;
 
-      const tick = () => {
-        if (!bubbleRunning) return;
+  const tick = () => {
+    if (!bubbleRunning) return;
 
-       const stageRect = bubbleStage.getBoundingClientRect();
-const stageW = stageRect.width;
-const stageH = stageRect.height;   // ✅ ADD THIS
+    const stageRect = bubbleStage.getBoundingClientRect();
+    const stageW = stageRect.width;
+    const stageH = stageRect.height;
 
-        for (const b of bubbles){
-  if (b.popped) continue;
+    for (const b of bubbles){
+      if (b.popped) continue;
 
-  // vertical fall (slower + smoother)
-  b.y += b.speed * 0.9;
+      // vertical fall
+      b.y += b.speed * 0.9;
 
-  // gentle horizontal drift
-  b.x += b.drift;
+      // horizontal drift
+      b.x += b.drift;
 
-  // bounce softly off left/right edges
-  if (b.x <= 0 || b.x + b.size >= stageW) {
-  b.drift *= -1.15;   // a touch more energy
-}
-          // ✅ hard clamp so nothing can drift off-screen
-b.x = Math.max(0, Math.min(stageW - b.size, b.x));
+      // bounce off left/right edges (slightly more energetic)
+      if (b.x <= 0 || b.x + b.size >= stageW) {
+        b.drift *= -1.15;
+      }
 
-  // ✅ simple collision spacing (ADD THIS RIGHT HERE)
-  for (let other of bubbles){
-    if (other === b || other.popped) continue;
+      // clamp on-screen
+      b.x = Math.max(0, Math.min(stageW - b.size, b.x));
 
-    const dx = (b.x + b.size/2) - (other.x + other.size/2);
-    const dy = (b.y + b.size/2) - (other.y + other.size/2);
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    const minDist = b.size * 0.98;
+      // collisions (push away to reduce overlap)
+      for (const other of bubbles){
+        if (other === b || other.popped) continue;
 
-    if (dist < minDist){
-  const angle = Math.atan2(dy, dx);
-  const push = (minDist - dist) * 0.12;
+        const dx = (b.x + b.size/2) - (other.x + other.size/2);
+        const dy = (b.y + b.size/2) - (other.y + other.size/2);
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        const minDist = b.size * 0.98;
 
-  b.x += Math.cos(angle) * push;
-  b.y += Math.sin(angle) * push * 0.15; // 👈 reduce vertical distortion
-}
+        if (dist > 0 && dist < minDist){
+          const angle = Math.atan2(dy, dx);
+          const push  = (minDist - dist) * 0.12;
 
-  // recycle at bottom
-  if (b.y > stageH + 40){
-    b.y = - (Math.random() * 260 + 120);
+          b.x += Math.cos(angle) * push;
+          b.y += Math.sin(angle) * push * 0.15; // keep vertical motion calmer
+        }
+      } // ✅ CLOSE collision loop
 
-    // pick a fresh x (avoid stacking)
-    let nx = 0;
-    let t = 0;
-    do {
-      nx = Math.random() * Math.max(1, (stageW - b.size));
-      t++;
-    } while (
-      t < 25 &&
-      bubbles.some(o =>
-        o !== b && !o.popped &&
-        Math.abs((nx + b.size/2) - (o.x + o.size/2)) < (b.size * 0.75)
-      )
-    );
+      // recycle at bottom
+      if (b.y > stageH + 40){
+        b.y = - (Math.random() * 260 + 120);
 
-    b.x = nx;
-    b.x = Math.max(0, Math.min(stageW - b.size, b.x));
-  }
+        // pick a fresh x (avoid stacking)
+        let nx = 0;
+        let t = 0;
+        do {
+          nx = Math.random() * Math.max(1, (stageW - b.size));
+          t++;
+        } while (
+          t < 25 &&
+          bubbles.some(o =>
+            o !== b && !o.popped &&
+            Math.abs((nx + b.size/2) - (o.x + o.size/2)) < (b.size * 0.75)
+          )
+        );
 
-  b.el.style.transform = `translate3d(${b.x}px, ${b.y}px, 0)`;
-}
-        bubbleRAF = requestAnimationFrame(tick);
-      };
+        b.x = Math.max(0, Math.min(stageW - b.size, nx));
+      }
 
-      bubbleRAF = requestAnimationFrame(tick);
+      b.el.style.transform = `translate3d(${b.x}px, ${b.y}px, 0)`;
     }
+
+    bubbleRAF = requestAnimationFrame(tick);
+  };
+
+  bubbleRAF = requestAnimationFrame(tick);
+}
 
     function stopBubbleLoop(){
       bubbleRunning = false;
