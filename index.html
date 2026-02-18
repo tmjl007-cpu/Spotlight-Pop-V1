@@ -221,13 +221,13 @@ touch-action: manipulation;
     .bubble{
       position:absolute;
       left:0; top:0;
-      width: clamp(110px, 30vw, 160px);
-      height: clamp(110px, 30vw, 160px);
+     width: clamp(96px, 26vw, 145px);
+height: clamp(96px, 26vw, 145px);
       border-radius:999px;
       display:grid;
       place-items:center;
       text-align:center;
-      padding:14px;
+      padding:12px;
       cursor:pointer;
       user-select:none;
       -webkit-tap-highlight-color: transparent;
@@ -237,18 +237,19 @@ touch-action: manipulation;
       will-change: transform;
     }
     .bubble .bTitle{
-      font-weight:950;
-      color: var(--navy);
-      font-size:14px;
-      line-height:1.15;
-    }
-    .bubble .bSub{
-      margin-top:6px;
-      font-weight:850;
-      font-size:11px;
-      color: rgba(11,31,77,.70);
-      line-height:1.25;
-    }
+  font-weight:950;
+  color: var(--navy);
+  font-size:13px;        /* slightly smaller */
+  line-height:1.1;       /* tighter */
+}
+
+.bubble .bSub{
+  margin-top:4px;        /* tighter spacing */
+  font-weight:850;
+  font-size:10px;        /* slightly smaller */
+  color: rgba(11,31,77,.70);
+  line-height:1.15;      /* tighter */
+}
     /* Category-tinted bubbles */
 .bubble.c-px,
 .bubble.c-staff,
@@ -1483,7 +1484,7 @@ function spawnBubbleById(id){
     </div>
   `;
 
-  const size = Math.min(160, Math.max(115, stageW * 0.28));
+  const size = Math.min(145, Math.max(100, stageW * 0.24));
   const x = Math.random() * Math.max(1, (stageW - size));
   const y = - (80 + Math.random()*220);
   const speed = 0.45; // consistent, calm fall speed
@@ -1519,7 +1520,7 @@ const stageH = bubbleStage.clientHeight;
         `;
 
         // size tied to stage width (keeps it usable on iPhone)
-        const size = Math.min(160, Math.max(115, stageW * 0.28));
+        const size = Math.min(145, Math.max(100, stageW * 0.24));
         const pad = 14;
 
         // Find a non-overlapping start pos (rejection sampling)
@@ -1584,8 +1585,8 @@ const stageH = stageRect.height;   // ✅ ADD THIS
 
   // bounce softly off left/right edges
   if (b.x <= 0 || b.x + b.size >= stageW) {
-    b.drift *= -1;
-  }
+  b.drift *= -1.15;   // a touch more energy
+}
           // ✅ hard clamp so nothing can drift off-screen
 b.x = Math.max(0, Math.min(stageW - b.size, b.x));
 
@@ -1596,11 +1597,11 @@ b.x = Math.max(0, Math.min(stageW - b.size, b.x));
     const dx = (b.x + b.size/2) - (other.x + other.size/2);
     const dy = (b.y + b.size/2) - (other.y + other.size/2);
     const dist = Math.sqrt(dx*dx + dy*dy);
-    const minDist = b.size * 0.85;
+    const minDist = b.size * 0.98;
 
     if (dist < minDist){
       const angle = Math.atan2(dy, dx);
-      const push = (minDist - dist) * 0.08;
+      const push = (minDist - dist) * 0.12;
       b.x += Math.cos(angle) * push;
       b.y += Math.sin(angle) * push;
     }
