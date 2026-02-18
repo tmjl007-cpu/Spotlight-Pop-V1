@@ -1638,12 +1638,19 @@ b.drift = Math.max(-MAX_DRIFT, Math.min(MAX_DRIFT, b.drift));
         const minDist = b.size * 0.98;
 
         if (dist > 0 && dist < minDist){
-          const angle = Math.atan2(dy, dx);
-          const push  = (minDist - dist) * 0.12;
 
-          b.x += Math.cos(angle) * push;
-          b.y += Math.sin(angle) * push * 0.15; // keep vertical motion calmer
-        }
+  const angle = Math.atan2(dy, dx);
+
+  // small separation push
+  const push = (minDist - dist) * 0.15;
+
+  b.x += Math.cos(angle) * push;
+  b.y += Math.sin(angle) * push * 0.2;
+
+  // 👇 subtle horizontal deflection (safe bounce effect)
+  b.drift += Math.cos(angle) * 0.05;
+
+}
       } // ✅ CLOSE collision loop
 
       // recycle at bottom
