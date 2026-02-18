@@ -1642,10 +1642,10 @@ b.drift = Math.max(-MAX_DRIFT, Math.min(MAX_DRIFT, b.drift));
   const angle = Math.atan2(dy, dx);
 
   // small separation push
-  const push = (minDist - dist) * 0.15;
+  const push  = (minDist - dist) * 0.18;   // stronger separation
 
-  b.x += Math.cos(angle) * push;
-  b.y += Math.sin(angle) * push * 0.2;
+b.x += Math.cos(angle) * push;           // more horizontal energy
+b.y += Math.sin(angle) * push * 0.12;    // keep vertical calm
 
   // 👇 subtle horizontal deflection (safe bounce effect)
   b.drift += Math.cos(angle) * 0.05;
