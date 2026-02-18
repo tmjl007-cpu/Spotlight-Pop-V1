@@ -717,6 +717,7 @@ touch-action: manipulation;
   .gameCard{
     width: 70%;              /* slightly narrower */
     max-width: 460px;        /* keeps it elegant */
+    padding: 10px 14px;      /* 👈 ADD THIS LINE */
   }
 }
     /* Game icon row */
@@ -724,6 +725,11 @@ touch-action: manipulation;
   display:flex;
   align-items:center;
   gap:12px;
+}
+    @media (min-width: 900px){
+  .gameRow{
+    gap: 8px;   /* slightly tighter spacing on iPad/Desktop */
+  }
 }
 
 .gameIcon{
