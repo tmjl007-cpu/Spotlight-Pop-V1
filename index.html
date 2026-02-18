@@ -725,7 +725,6 @@ touch-action: manipulation;
   }
 }
 
-}
     /* Game icon row */
 .gameRow{
   display:flex;
@@ -1860,18 +1859,6 @@ gameGrid.innerHTML = uniqueGames.map(id=>{
     function closeResults(){ resultsOverlay.classList.add("hidden"); }
 
    function showLead(){
-  resultsOverlay.classList.add("hidden");
-  leadOverlay.classList.remove("hidden");
-     // ✅ ALWAYS reset to form state when opening
-  document.getElementById("leadHeader").classList.remove("hidden");
-  leadFormState.classList.remove("hidden");
-  thankYouState.classList.add("hidden");
-
-  // optional but clean
-  leadForm.reset();
-  leadError.textContent = "";
-  leadSuccess.textContent = "";
-}
 
   // ✅ ensure lead starts in "form mode"
   document.getElementById("leadHeader").classList.remove("hidden");
