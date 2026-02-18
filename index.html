@@ -1859,12 +1859,28 @@ gameGrid.innerHTML = uniqueGames.map(id=>{
 
     function closeResults(){ resultsOverlay.classList.add("hidden"); }
 
-    function showLead(){
-      resultsOverlay.classList.add("hidden");
-      leadOverlay.classList.remove("hidden");
-      leadError.textContent = "";
-      leadSuccess.textContent = "";
-    }
+   function showLead(){
+  resultsOverlay.classList.add("hidden");
+  leadOverlay.classList.remove("hidden");
+     // ✅ ALWAYS reset to form state when opening
+  document.getElementById("leadHeader").classList.remove("hidden");
+  leadFormState.classList.remove("hidden");
+  thankYouState.classList.add("hidden");
+
+  // optional but clean
+  leadForm.reset();
+  leadError.textContent = "";
+  leadSuccess.textContent = "";
+}
+
+  // ✅ ensure lead starts in "form mode"
+  document.getElementById("leadHeader").classList.remove("hidden");
+  leadFormState.classList.remove("hidden");
+  thankYouState.classList.add("hidden");
+
+  leadError.textContent = "";
+  leadSuccess.textContent = "";
+}
 
     function closeLead(){ leadOverlay.classList.add("hidden"); }
 
@@ -2121,7 +2137,9 @@ continueBtn.addEventListener("click", () => {
       if (shareQr){
         shareQr.src = "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" + encodeURIComponent(shareUrl);
       }
-
+// hide header on the Thank You screen
+document.getElementById("leadHeader").classList.add("hidden");
+      
       leadFormState.classList.add("hidden");
       thankYouState.classList.remove("hidden");
       // 🔥 hide the top header after submission
@@ -2170,31 +2188,35 @@ document.getElementById("leadHeader").classList.add("hidden");
     }
 
     // Start over
-    if (startOverBtn){
-      startOverBtn.addEventListener("click", ()=>{
-        picked = [];
-        renderPicked();
+   // Start over
+if (startOverBtn){
+  startOverBtn.addEventListener("click", ()=>{
+    picked = [];
+    renderPicked();
 
-        // close overlays
-        leadOverlay.classList.add("hidden");
-        resultsOverlay.classList.add("hidden");
-        scoreOverlay.classList.add("hidden");
+    // close overlays
+    leadOverlay.classList.add("hidden");
+    resultsOverlay.classList.add("hidden");
+    scoreOverlay.classList.add("hidden");
 
-        // reset lead UI
-        thankYouState.classList.add("hidden");
-        leadFormState.classList.remove("hidden");
-        leadForm.reset();
-        leadError.textContent = "";
-        leadSuccess.textContent = "";
+    // reset lead UI
+    thankYouState.classList.add("hidden");
+    leadFormState.classList.remove("hidden");
+    leadForm.reset();
+    leadError.textContent = "";
+    leadSuccess.textContent = "";
 
-        // return to intro
-        introScreen.classList.remove("hidden");
-        gameContainer.classList.add("hidden");
+    // ✅ restore header every time
+    document.getElementById("leadHeader").classList.remove("hidden");
 
-        stopBubbleLoop();
-        resetBubbles();
-      });
-    }
+    // return to intro
+    introScreen.classList.remove("hidden");
+    gameContainer.classList.add("hidden");
+
+    stopBubbleLoop();
+    resetBubbles();
+  });
+}
 
     // init
     renderPicked();
