@@ -702,27 +702,28 @@ touch-action: manipulation;
     }
 
 /* Games grid */
+/* Games grid (default = stacked) */
 .gameGrid{
   margin-top:14px;
   display:grid;
-  grid-template-columns: 1fr;   /* always stacked */
+  grid-template-columns: 1fr;
   gap:10px;
 }
 
-@media (min-width: 900px){
-
+/* iPad+ tightening */
+@media (min-width: 768px){
   .gameGrid{
-    display: flex;               /* override grid */
-    flex-direction: column;      /* stack vertically */
-    align-items: center;         /* center everything */
-    gap: 16px;                   /* slightly more spacing */
+    display:flex;               /* override grid */
+    flex-direction: column;     /* keep stacked */
+    align-items: center;        /* center cards */
+    gap: 14px;
   }
 
   .gameCard{
-    width: 60%;                  /* tighter width */
-    max-width: 480px;            /* elegant cap */
-    padding: 14px 18px;          /* balanced padding */
+    width: 60%;                 /* tighter */
+    max-width: 520px;           /* elegant cap */
   }
+}
 
 }
     /* Game icon row */
