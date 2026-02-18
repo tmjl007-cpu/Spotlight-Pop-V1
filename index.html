@@ -1099,9 +1099,11 @@ height: clamp(96px, 26vw, 145px);
   </div>
 
  <!-- Lead Capture Overlay -->
+<!-- Lead Capture Overlay -->
 <div id="leadOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Lead capture">
   <div class="modal">
 
+    <!-- HEADER (shows only during form state) -->
     <div id="leadHeader" class="modalTop">
       <div>
         <h2 class="title">Your Custom Game Plan Awaits</h2>
@@ -1110,23 +1112,61 @@ height: clamp(96px, 26vw, 145px);
       <button class="closeBtn" id="closeLeadBtn" aria-label="Close lead capture">✕</button>
     </div>
 
-    <!-- ✅ FORM STATE -->
+    <!-- ========================= -->
+    <!-- FORM STATE -->
+    <!-- ========================= -->
     <div id="leadFormState">
       <form id="leadForm">
+
         <div class="formGrid">
-          <!-- your fields... -->
+
+          <div class="field">
+            <label for="firstName">First name</label>
+            <input id="firstName" name="firstName" autocomplete="given-name" required />
+          </div>
+
+          <div class="field">
+            <label for="lastName">Last name</label>
+            <input id="lastName" name="lastName" autocomplete="family-name" required />
+          </div>
+
+          <div class="field">
+            <label for="organization">Organization</label>
+            <input id="organization" name="organization" autocomplete="organization" required />
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required />
+          </div>
+
+          <div class="field">
+            <label for="phone">Phone number</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" required />
+          </div>
+
+          <div class="field">
+            <label for="role">Role (optional)</label>
+            <input id="role" name="role" autocomplete="organization-title" />
+          </div>
+
         </div>
 
         <div class="error" id="leadError"></div>
         <div class="success" id="leadSuccess"></div>
 
         <div class="actions">
-          <button type="submit" class="primaryCta">Get My Custom Game Plan</button>
+          <button type="submit" class="primaryCta">
+            Get My Custom Game Plan
+          </button>
         </div>
+
       </form>
     </div>
 
-    <!-- ✅ THANK YOU STATE (badge + actions) -->
+    <!-- ========================= -->
+    <!-- THANK YOU STATE -->
+    <!-- ========================= -->
     <div id="thankYouState" class="hidden">
 
       <div class="title" style="margin-top:18px; margin-bottom:6px; text-align:center;">
@@ -1145,6 +1185,7 @@ height: clamp(96px, 26vw, 145px);
         />
       </div>
 
+      <!-- Primary CTA -->
       <div class="actions">
         <a
           href="https://calendly.com/tim-lafrankie-gratiahealth/gratia-alignment-session"
@@ -1156,31 +1197,32 @@ height: clamp(96px, 26vw, 145px);
         </a>
       </div>
 
-    </div>
-
-  </div>
-</div>
-
-
-        <div class="actions" style="margin-top:12px;">
-          <button type="button" class="btn secondary primaryBlue" id="openScoreBtn">
-  See How You Stack Up
-</button>
-        </div>
-
-        <div style="margin-top:22px; font-weight:950; color: var(--navy); text-align:center;">
-          Invite a colleague to explore visibility in action
-        </div>
-
-       <div class="shareRow">
-  <div class="shareButtons">
-    <button type="button" class="utilityBtn shareBtn" id="copyLinkBtn">Copy link</button>
-    <button type="button" class="utilityBtn shareBtn" id="startOverBtn">Start over</button>
-  </div>
-</div>
+      <!-- Secondary CTA -->
+      <div class="actions" style="margin-top:12px;">
+        <button type="button" class="btn primaryBlue" id="openScoreBtn">
+          See How You Stack Up
+        </button>
       </div>
+
+      <div style="margin-top:22px; font-weight:950; color: var(--navy); text-align:center;">
+        Invite a colleague to explore visibility in action
+      </div>
+
+      <div class="shareRow">
+        <div class="shareButtons">
+          <button type="button" class="utilityBtn shareBtn" id="copyLinkBtn">
+            Copy link
+          </button>
+          <button type="button" class="utilityBtn shareBtn" id="startOverBtn">
+            Start over
+          </button>
+        </div>
+      </div>
+
     </div>
+
   </div>
+</div>
 
   <!-- Live Scoreboard Overlay -->
   <div id="scoreOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Live conference results">
