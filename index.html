@@ -549,7 +549,7 @@ height: clamp(96px, 26vw, 145px);
 
     /* ✅ only buttons inside rows should flex */
 .btnrow button,
-.actions button{
+.actions button:not(.primaryBlue){
   flex:1;
   border:none;
   border-radius:12px;
@@ -1173,7 +1173,7 @@ height: clamp(96px, 26vw, 145px);
   </div>
 
   <p class="subtext" style="margin-top:0; margin-bottom:10px; text-align:center;">
-    Challenge complete. Visibility unlocked.
+    Challenge complete. Your visibility strategy is ready.
   </p>
 
   <!-- Badge (slightly smaller + less vertical space) -->
@@ -1199,11 +1199,15 @@ height: clamp(96px, 26vw, 145px);
   </div>
 
   <!-- Secondary CTA -->
-  <div class="actions" style="margin-top:10px;">
-    <button type="button" class="btn primaryBlue" id="openScoreBtn">
-      See How You Stack Up
-    </button>
-  </div>
+  <div class="actions" style="margin-top:12px;">
+  <button 
+    type="button" 
+    class="btn primaryBlue" 
+    id="openScoreBtn"
+    style="width:100%;">
+    See How You Stack Up
+  </button>
+</div>
 
   <!-- Invite + share -->
   <div style="margin-top:16px; font-weight:950; color: var(--navy); text-align:center;">
