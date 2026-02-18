@@ -93,6 +93,8 @@ body{
     rgba(0,0,0,.35) 55%,
     rgba(0,0,0,.55) 100%
   );
+    pointer-events:none;   /* ✅ IMPORTANT: don’t block clicks */
+  z-index:1
 }
 
 /* Content positioning */
@@ -105,7 +107,8 @@ body{
   justify-content:flex-end;
 
   padding-bottom: calc(60px + env(safe-area-inset-bottom));
-  pointer-events:auto;
+  pointer-events:auto;   /* ✅ allow clicks */
+  z-index:2;  
 }
 
 /* Start button */
@@ -1998,8 +2001,15 @@ gameGrid.innerHTML = uniqueGames.map(id=>{
 
     // ---------- Wire up events ----------
     // Start
-    startBtn.addEventListener("click", startGame);
-    startBtn.addEventListener("touchend", (e)=>{ e.preventDefault(); startGame(e); }, { passive:false });
+    startBtn.addEventListener("pointerup", (e)=>{
+  e.preventDefault();
+  startGame(e);
+}, { passive:false });
+
+startBtn.addEventListener("click", (e)=>{
+  e.preventDefault();
+  startGame(e);
+});
 
     // Reset
     resetBtn.addEventListener("click", resetGame);
