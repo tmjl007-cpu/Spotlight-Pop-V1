@@ -218,19 +218,20 @@ touch-action: manipulation;
     }
 
     /* 👇 PASTE THIS RIGHT HERE */
-@media (min-width: 768px) and (max-width: 1100px){
-  .panel{
-    height: 100svh;
+/* ✅ iPad/tablets only (coarse pointer): increase stage height without blowing up spacing */
+@media (min-width: 768px) and (hover: none) and (pointer: coarse){
+  .bubbleStage{
+    height: 62vh;          /* fills more vertical space on iPad */
+    min-height: 520px;     /* safety */
+    max-height: 740px;     /* prevents it from getting gigantic */
   }
 
-  .bubbleStage{
-    height: auto !important;
-    flex: 1 1 auto;
-    min-height: 520px;
+  .panel{
+    padding-bottom: 10px;   /* 👈 tighter bottom spacing */
   }
 
   .gameFooter{
-    margin-top: 12px;
+    margin-top: 8px;        /* slightly tighter */
   }
 }
 
