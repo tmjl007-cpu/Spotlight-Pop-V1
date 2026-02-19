@@ -1544,7 +1544,10 @@ function spawnBubbleById(id){
   const size = Math.min(145, Math.max(100, stageW * 0.24)) * 0.90; // ✅ 10% smaller
   const x = Math.random() * Math.max(1, (stageW - size));
   const y = - (80 + Math.random()*220);
-    const speed = 0.45; // calm vertical fall
+    const isTablet = window.matchMedia("(hover: none) and (pointer: coarse) and (min-width: 768px)").matches;
+
+// Slightly faster fall on iPad
+const speed = isTablet ? 0.65 : 0.45;
 
   // ✅ horizontal velocity (replaces drift)
   const isWide = window.innerWidth >= 768;
