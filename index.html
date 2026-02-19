@@ -221,23 +221,23 @@ touch-action: manipulation;
 /* ✅ iPad/tablets only (coarse pointer): increase stage height without blowing up spacing */
 @media (min-width: 768px) and (hover: none) and (pointer: coarse){
 
-    .gameOnly{
-    max-width: 760px;   /* was effectively full width */
+  .gameOnly{
+    max-width: 720px;   /* slightly narrower */
     margin: 0 auto;
   }
-  
+
   .bubbleStage{
-    height: 62vh;          /* fills more vertical space on iPad */
-    min-height: 520px;     /* safety */
-    max-height: 740px;     /* prevents it from getting gigantic */
+    height: 62vh;
+    min-height: 520px;
+    max-height: 740px;
   }
 
   .panel{
-    padding-bottom: 10px;   /* 👈 tighter bottom spacing */
+    padding-bottom: 10px;
   }
 
   .gameFooter{
-    margin-top: 8px;        /* slightly tighter */
+    margin-top: 8px;
   }
 }
 
