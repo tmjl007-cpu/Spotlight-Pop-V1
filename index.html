@@ -1595,9 +1595,8 @@ bubbleData.forEach((item) => {
       const speed = 0.45;
 
 // More lateral energy on wider screens (iPad/Desktop)
-const drift = (Math.random() - 0.5) * (isWide ? 1.15 : 0.55);
-  
-const b = { id: item.id, el, x, y, size, speed, drift, popped:false };
+const vx = (Math.random() - 0.5) * (isWide ? 1.15 : 0.55); // horizontal velocity
+const b  = { id: item.id, el, x, y, size, speed, vx, popped:false };
 
        const pop = () => {
   unlockAudio();     // ✅ first user gesture unlocks audio on iPhone
