@@ -1614,6 +1614,7 @@ function spawnBubbleById(id){
     const stageRect = bubbleStage.getBoundingClientRect();
     const stageW = stageRect.width;
     const stageH = stageRect.height;
+    const t = performance.now();
 
     for (const b of bubbles){
       if (b.popped) continue;
@@ -1623,7 +1624,12 @@ function spawnBubbleById(id){
       b.y += b.speed *1.01;
 
       // horizontal drift
-      b.x += b.vx;
+      // horizontal drift + gentle wobble (premium airflow)
+const wobbleAmp = 0.35;          // tune 0.20–0.60
+const wobbleHz  = 0.0018;        // tune 0.0012–0.0026 (speed)
+const wobble = Math.sin(t * wobbleHz + (b._wSeed || (b._wSeed = Math.random() * 1000))) * wobbleAmp;
+
+b.x += b.vx + wobble;
       
     // clamp vx so it never grows over time
 const MAX_VX = 1.8; // tweak 1.2–2.6
