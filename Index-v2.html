@@ -71,21 +71,18 @@ body{
   background-repeat: no-repeat;
   background-color:#081735;       /* fill side gaps cleanly */
 }
-    /* iPad / tablet only */
+    
+/* iPad / tablet only */
 @media (min-width: 768px) and (max-width: 1100px) and (hover: none) and (pointer: coarse){
 
   .introHeroBg{
     background-size: 85%;
-    background-position: center 6%;   /* move image UP */
-  }
-   /* Raise button */
-  .introOverlay{
-    justify-content: center;
-    padding-bottom: 0;
+    background-position: center 24%;
   }
 
-  .startHeroBtn{
-    transform: translateY(140px);  /* fine tune button height */
+  .introOverlay{
+    justify-content: center;   /* move button into middle */
+    padding-bottom: 0;         /* remove bottom lock */
   }
 
 }
