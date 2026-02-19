@@ -1679,109 +1679,105 @@ function spawnBubbleById(id){
 }
 
 
-    function startBubbleLoop(){
+   function startBubbleLoop(){
   if (bubbleRunning) return;
   bubbleRunning = true;
 
   const tick = () => {
-  if (!bubbleRunning) return;
+    if (!bubbleRunning) return;
 
-  try {
     const stageRect = bubbleStage.getBoundingClientRect();
-    const stageW = stageRect.width;
-    const stageH = stageRect.height;
+    const W = stageRect.width;
+    const H = stageRect.height;
 
     const now = performance.now();
 
-    // ✅ global breeze (slow group drift)
-    const breezeAmp = 0.25;     // tune 0.10–0.35
-    const breezeHz  = 0.00020;  // tune 0.00015–0.00040
-    const breeze = Math.sin(now * breezeHz) * breezeAmp;
+    // tuning for “aquarium drift”
+    const drag = 0.995;
+    const wallBounce = 0.96;
+    const maxV = 0.85;
 
+    const repulsePad = 6;     // prevents perfect stacking
+    const wobbleAmp = 0.030;  // tiny drift variation
+    const wobbleHz  = 0.0014;
+
+    // 1) move + wall bounce
     for (const b of bubbles){
       if (b.popped) continue;
-      if (typeof b.vx !== "number") b.vx = 0;
 
-      // vertical fall
-      b.y += b.speed * 1.01;
-
-      // gentle wobble (per bubble)
-      const wobbleAmp = 0.35;   // tune 0.20–0.60
-      const wobbleHz  = 0.0018; // tune 0.0012–0.0026
-      if (b._wSeed == null) b._wSeed = Math.random() * 1000;
       const wobble = Math.sin(now * wobbleHz + b._wSeed) * wobbleAmp;
+      b.vx += wobble;
+      b.vy -= wobble * 0.6;
 
-      // horizontal drift
-      b.x += b.vx + wobble + breeze;
+      b.vx *= drag;
+      b.vy *= drag;
 
-      // clamp vx
-      const MAX_VX = 1.8; // tweak 1.2–2.6
-      b.vx = Math.max(-MAX_VX, Math.min(MAX_VX, b.vx));
+      b.vx = Math.max(-maxV, Math.min(maxV, b.vx));
+      b.vy = Math.max(-maxV, Math.min(maxV, b.vy));
 
-      // bounce off left/right edges
-      if (b.x <= 0 || b.x + b.size >= stageW) {
-        b.vx *= -1.05;
-      }
+      b.x += b.vx;
+      b.y += b.vy;
 
-      // clamp on-screen
-      b.x = Math.max(0, Math.min(stageW - b.size, b.x));
+      // walls
+      if (b.x <= 0){ b.x = 0; b.vx = Math.abs(b.vx) * wallBounce; }
+      if (b.y <= 0){ b.y = 0; b.vy = Math.abs(b.vy) * wallBounce; }
 
-      // collisions
-      for (const other of bubbles){
-        if (other === b || other.popped) continue;
+      if (b.x + b.size >= W){ b.x = W - b.size; b.vx = -Math.abs(b.vx) * wallBounce; }
+      if (b.y + b.size >= H){ b.y = H - b.size; b.vy = -Math.abs(b.vy) * wallBounce; }
+    }
 
-        const dx = (b.x + b.size/2) - (other.x + other.size/2);
-        const dy = (b.y + b.size/2) - (other.y + other.size/2);
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        const minDist = (b.size/2) + (other.size/2);
+    // 2) bubble collisions + soft repulsion
+    for (let i=0; i<bubbles.length; i++){
+      const a = bubbles[i];
+      if (a.popped) continue;
 
-        if (dist > 0 && dist < minDist){
-          const angle = Math.atan2(dy, dx);
+      for (let j=i+1; j<bubbles.length; j++){
+        const b = bubbles[j];
+        if (b.popped) continue;
+
+        const ax = a.x + a.r, ay = a.y + a.r;
+        const bx = b.x + b.r, by = b.y + b.r;
+
+        const dx = ax - bx;
+        const dy = ay - by;
+
+        const dist = Math.hypot(dx, dy) || 0.0001;
+        const minDist = a.r + b.r + repulsePad;
+
+        if (dist < minDist){
           const overlap = (minDist - dist);
+          const nx = dx / dist;
+          const ny = dy / dist;
 
-          // separation
-          const push = overlap * 0.18;
-          const ix = Math.cos(angle) * push;
-          const iy = Math.sin(angle) * push * 0.08;
+          const push = overlap * 0.50;
+          a.x += nx * push; a.y += ny * push;
+          b.x -= nx * push; b.y -= ny * push;
 
-          b.x     += ix;   b.y     += iy;
-          other.x -= ix;   other.y -= iy;
+          // small “bump” impulse so they don’t stick
+          const impulse = 0.08;
+          a.vx += nx * impulse; a.vy += ny * impulse;
+          b.vx -= nx * impulse; b.vy -= ny * impulse;
 
-          // bounce impulse
-          const rebound = 0.14;
-          b.vx     += ix * rebound;
-          other.vx -= ix * rebound;
-
-          const maxVX2 = 2.4;
-          b.vx = Math.max(-maxVX2, Math.min(maxVX2, b.vx));
-          other.vx = Math.max(-maxVX2, Math.min(maxVX2, other.vx));
+          a.vx = Math.max(-maxV, Math.min(maxV, a.vx));
+          a.vy = Math.max(-maxV, Math.min(maxV, a.vy));
+          b.vx = Math.max(-maxV, Math.min(maxV, b.vx));
+          b.vy = Math.max(-maxV, Math.min(maxV, b.vy));
         }
       }
+    }
 
-      
-// ✅ recycle at bottom (NO delay — immediate re-entry)
-if (b.y > stageH + b.size){
-
-  // respawn right above the visible stage (tiny jitter only)
-  b.y = -b.size + (Math.random() * 12);   // tune 0–20 for “natural” feel
-
-  // fresh x each time
-  b.x = Math.random() * Math.max(1, (stageW - b.size));
-}
-
+    // 3) render
+    for (const b of bubbles){
+      if (b.popped) continue;
       b.el.style.transform = `translate3d(${b.x}px, ${b.y}px, 0)`;
     }
-  } catch (err) {
-    console.error("Bubble tick crashed:", err);
-  }
 
- // ✅ ONLY ONE RAF CALL — inside tick
     bubbleRAF = requestAnimationFrame(tick);
   };
 
-  // ✅ Start it ONCE here
   bubbleRAF = requestAnimationFrame(tick);
 }
+
 
     function stopBubbleLoop(){
       bubbleRunning = false;
