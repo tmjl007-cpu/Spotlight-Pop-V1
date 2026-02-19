@@ -1535,78 +1535,74 @@ function spawnBubbleById(id){
   bubbleStage.appendChild(el);
   bubbles.push(bObj);
 }
-    function createBubbles(){
-      if (!bubbleStage) return;
+  function createBubbles(){
+  if (!bubbleStage) return;
 
-      resetBubbles();
+  resetBubbles();
 
-      const stageW = bubbleStage.clientWidth;
-const stageH = bubbleStage.clientHeight;
+  const stageW = bubbleStage.clientWidth;
+  const stageH = bubbleStage.clientHeight;
 
-// ✅ define isWide ONCE, up here (before you use it anywhere)
-const isWide = window.innerWidth >= 768;
+  // ✅ define isWide ONCE, up here
+  const isWide = window.innerWidth >= 768;
 
-// ✅ use the real list only (always 12)
-data.forEach((item) => {
+  // ✅ always 12 bubbles (no duplicates)
+  data.forEach((item) => {
+    const el = document.createElement("div");
+    el.className = "bubble";
+    applyPriorityColor(el, item.id);
+    el.dataset.id = item.id;
+    el.innerHTML = `
+      <div>
+        <div class="bTitle">${item.label}</div>
+        <div class="bSub">Tap to pop</div>
+      </div>
+    `;
 
-bubbleData.forEach((item) => {
-  
-        const el = document.createElement("div");
-        el.className = "bubble";
-        applyPriorityColor(el, item.id);
-        el.dataset.id = item.id;
-        el.innerHTML = `
-          <div>
-            <div class="bTitle">${item.label}</div>
-            <div class="bSub">Tap to pop</div>
-          </div>
-        `;
+    // size tied to stage width
+    const size = Math.min(145, Math.max(100, stageW * 0.24)) * 0.90; // ✅ 10% smaller
+    const pad = 14;
 
-        // size tied to stage width (keeps it usable on iPhone)
-        const size = Math.min(145, Math.max(100, stageW * 0.24));
-        const pad = 14;
+    // Find a non-overlapping start pos
+    let x = 0, y = 0, tries = 0;
+    const overlaps = (nx, ny) => {
+      for (const other of bubbles){
+        if (other.popped) continue;
+        const dx = (nx + size/2) - (other.x + other.size/2);
+        const dy = (ny + size/2) - (other.y + other.size/2);
+        const dist = Math.hypot(dx, dy);
+        const minDist = (size/2 + other.size/2 + pad);
+        if (dist < minDist) return true;
+      }
+      return false;
+    };
 
-        // Find a non-overlapping start pos (rejection sampling)
-        let x = 0, y = 0, tries = 0;
-        const overlaps = (nx, ny) => {
-          for (const other of bubbles){
-            if (other.popped) continue;
-            const dx = (nx + size/2) - (other.x + other.size/2);
-            const dy = (ny + size/2) - (other.y + other.size/2);
-            const dist = Math.hypot(dx, dy);
-            const minDist = (size/2 + other.size/2 + pad);
-            if (dist < minDist) return true;
-          }
-          return false;
-        };
+    do {
+      x = Math.random() * Math.max(1, (stageW - size));
+      const spawnBand = isWide ? 0.22 : 0.35;
+      y = (Math.random() * (stageH * spawnBand)) - size;
+      tries++;
+    } while (overlaps(x, y) && tries < 60);
 
-        do {
-          x = Math.random() * Math.max(1, (stageW - size));
-          const spawnBand = isWide ? 0.22 : 0.35;
-          y = (Math.random() * (stageH * spawnBand)) - size;
-          tries++;
-        } while (overlaps(x, y) && tries < 60);
+    const speed = 0.45;
+    const vx = (Math.random() - 0.5) * (isWide ? 1.15 : 0.55);
 
-      const speed = 0.45;
+    const b = { id: item.id, el, x, y, size, speed, vx, popped:false };
 
-// More lateral energy on wider screens (iPad/Desktop)
-const vx = (Math.random() - 0.5) * (isWide ? 1.15 : 0.55); // horizontal velocity
-const b  = { id: item.id, el, x, y, size, speed, vx, popped:false };
+    const pop = () => {
+      unlockAudio();
+      handleBubblePop(b);
+    };
 
-       const pop = () => {
-  unlockAudio();     // ✅ first user gesture unlocks audio on iPhone
-  handleBubblePop(b);
-};
+    el.addEventListener("click", pop);
+    el.addEventListener("touchend", (e)=>{ e.preventDefault(); pop(); }, { passive:false });
 
-el.addEventListener("click", pop);
-el.addEventListener("touchend", (e)=>{ e.preventDefault(); pop(); }, { passive:false });
+    bubbleStage.appendChild(el);
+    bubbles.push(b);
+  });
 
-        bubbleStage.appendChild(el);
-        bubbles.push(b);
-      });
-
-      startBubbleLoop();
-    }
+  startBubbleLoop();
+}
 
     function startBubbleLoop(){
   if (bubbleRunning) return;
