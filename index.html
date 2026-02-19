@@ -1521,7 +1521,7 @@ function spawnBubbleById(id){
   const x = Math.random() * Math.max(1, (stageW - size));
   const y = - (80 + Math.random()*220);
   const speed = 0.45; // consistent, calm fall speed
-  const drift = (Math.random() - 0.5) * 0.4;  // gentle left/right float
+  const drift = (Math.random() - 0.5) * 0.8;  // gentle left/right float
 
   const bObj = { id, el, x, y, size, speed, drift, popped:false };
 
@@ -1638,18 +1638,19 @@ b.drift = Math.max(-MAX_DRIFT, Math.min(MAX_DRIFT, b.drift));
         const minDist = b.size * 0.98;
 
         if (dist > 0 && dist < minDist){
-
   const angle = Math.atan2(dy, dx);
 
-  // small separation push
-  const push  = (minDist - dist) * 0.18;   // stronger separation
+  // slightly stronger separation
+  const push = (minDist - dist) * 0.18;
 
-b.x += Math.cos(angle) * push;           // more horizontal energy
-b.y += Math.sin(angle) * push * 0.12;    // keep vertical calm
+  const recoilX = Math.cos(angle) * push;
+  const recoilY = Math.sin(angle) * push * 0.25;
 
-  // 👇 subtle horizontal deflection (safe bounce effect)
-  b.drift += Math.cos(angle) * 0.05;
+  b.x += recoilX;
+  b.y += recoilY;
 
+  // 💡 subtle elastic rebound (premium buoyancy)
+  b.drift += recoilX * 0.04;
 }
       } // ✅ CLOSE collision loop
 
