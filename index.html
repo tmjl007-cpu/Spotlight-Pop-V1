@@ -1517,14 +1517,14 @@ function spawnBubbleById(id){
     </div>
   `;
 
-  const size = Math.min(145, Math.max(100, stageW * 0.24));
+  const size = Math.min(145, Math.max(100, stageW * 0.24)) * 0.90; // ✅ 10% smaller
   const x = Math.random() * Math.max(1, (stageW - size));
   const y = - (80 + Math.random()*220);
   const speed = 0.45;
 
 // More lateral energy on wider screens (iPad/Desktop)
 const isWide = window.innerWidth >= 768;
-const drift = (Math.random() - 0.5) * (isWide ? 0.9 : 0.4);
+const drift = (Math.random() - 0.5) * (isWide ? 1.25 : 0.6);
 
   const bObj = { id, el, x, y, size, speed, drift, popped:false };
 
@@ -1595,7 +1595,7 @@ bubbleData.forEach((item) => {
       const speed = 0.45;
 
 // More lateral energy on wider screens (iPad/Desktop)
-const drift = (Math.random() - 0.5) * (isWide ? 0.9 : 0.4);
+const drift = (Math.random() - 0.5) * (isWide ? 1.15 : 0.55);
   
 const b = { id: item.id, el, x, y, size, speed, drift, popped:false };
 
@@ -1655,30 +1655,30 @@ b.drift = Math.max(-MAX_DRIFT, Math.min(MAX_DRIFT, b.drift));
         const dist = Math.sqrt(dx*dx + dy*dy);
         const minDist = b.size * 0.98;
 
-   if (dist > 0 && dist < minDist){
+ if (dist > 0 && dist < minDist){
   const angle = Math.atan2(dy, dx);
 
-  // ✅ separation strength (tune 0.10–0.22)
+  // ✅ stronger separation (still controlled)
   const overlap = (minDist - dist);
-  const push = overlap * 0.16;
+  const push = overlap * 0.18;
 
-  // ✅ split impulse between BOTH bubbles (feels like bounce)
+  // ✅ split impulse between BOTH bubbles (feels like true bounce)
   const ix = Math.cos(angle) * push;
-  const iy = Math.sin(angle) * push * 0.10;  // keep vertical calm
+  const iy = Math.sin(angle) * push * 0.08; // keep vertical calm
 
-  // push apart
+  // push apart (both bubbles)
   b.x     += ix;
   b.y     += iy;
   other.x -= ix;
   other.y -= iy;
 
-  // ✅ soft elastic rebound: nudge drifts in opposite directions
-  const rebound = 0.06; // tune 0.04–0.10
+  // ✅ elastic rebound (more noticeable, still stable)
+  const rebound = 0.095;
   b.drift     += ix * rebound;
   other.drift -= ix * rebound;
 
-  // ✅ keep drift from exploding (important on iPad)
-  const maxDrift = 1.2; // tune 0.9–1.6
+  // ✅ clamp drift so iPad never goes chaotic
+  const maxDrift = 1.8;
   b.drift = Math.max(-maxDrift, Math.min(maxDrift, b.drift));
   other.drift = Math.max(-maxDrift, Math.min(maxDrift, other.drift));
 }
