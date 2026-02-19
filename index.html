@@ -1555,7 +1555,7 @@ function spawnBubbleById(id){
   const y = -size + (Math.random() * 12);
 
   // ✅ faster fall on iPad, your normal elsewhere
-  const speed = isTablet ? 1.85 : 0.45;
+  const speed = isTablet ? 2.35 : 0.45;
 
   // horizontal movement
   const isWide = window.innerWidth >= 768;
@@ -1577,6 +1577,7 @@ function spawnBubbleById(id){
 
   const stageW = bubbleStage.clientWidth;
   const stageH = bubbleStage.clientHeight;
+    const isTablet = window.matchMedia("(hover: none) and (pointer: coarse) and (min-width: 768px)").matches;
 
   // ✅ define isWide ONCE, up here
   const isWide = window.innerWidth >= 768;
@@ -1625,7 +1626,7 @@ function spawnBubbleById(id){
   tries++;
 } while (overlaps(x, y) && tries < 60);
 
-    const speed = 0.45;
+    const speed = isTablet ? 2.35 : 0.45;
     const vx = (Math.random() - 0.5) * (isWide ? 1.15 : 0.55);
 
     const b = { id: item.id, el, x, y, size, speed, vx, popped:false };
