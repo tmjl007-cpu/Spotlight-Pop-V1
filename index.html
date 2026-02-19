@@ -1543,7 +1543,19 @@ const drift = (Math.random() - 0.5) * (isWide ? 0.9 : 0.4);
       const stageW = bubbleStage.clientWidth;
 const stageH = bubbleStage.clientHeight;
 
-      data.forEach((item) => {
+// ✅ define isWide ONCE, up here (before you use it anywhere)
+const isWide = window.innerWidth >= 768;
+
+// ✅ base bubble list
+let bubbleData = [...data];
+
+// ✅ add 2 extra bubbles only on wide screens
+if (isWide){
+  bubbleData = bubbleData.concat(data.slice(0, 2));
+}
+
+bubbleData.forEach((item) => {
+  
         const el = document.createElement("div");
         el.className = "bubble";
         applyPriorityColor(el, item.id);
@@ -1575,15 +1587,16 @@ const stageH = bubbleStage.clientHeight;
 
         do {
           x = Math.random() * Math.max(1, (stageW - size));
-          y = (Math.random() * (stageH * 0.35)) - size;
+          const spawnBand = isWide ? 0.22 : 0.35;
+          y = (Math.random() * (stageH * spawnBand)) - size;
           tries++;
         } while (overlaps(x, y) && tries < 60);
 
       const speed = 0.45;
 
 // More lateral energy on wider screens (iPad/Desktop)
-const isWide = window.innerWidth >= 768;
 const drift = (Math.random() - 0.5) * (isWide ? 0.9 : 0.4);
+  
 const b = { id: item.id, el, x, y, size, speed, drift, popped:false };
 
        const pop = () => {
