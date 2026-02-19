@@ -1610,7 +1610,7 @@ function spawnBubbleById(id){
     tries++;
   } while (overlaps(x, y) && tries < 100);
 
-  const base = isTablet ? 0.40 : 0.28;
+  const base = isTablet ? 0.32 : 0.22;
   const vx = (Math.random() - 0.5) * (isWide ? base : base * 0.8);
   const vy = (Math.random() - 0.5) * (isWide ? base : base * 0.8);
 
@@ -1687,7 +1687,7 @@ function spawnBubbleById(id){
     } while (overlaps(x, y) && tries < 120);
 
     // “aquarium drift” velocities (slow)
-    const base = isTablet ? 0.40 : 0.28;
+    const base = isTablet ? 0.32 : 0.22;
     const vx = (Math.random() - 0.5) * (isWide ? base : base * 0.8);
     const vy = (Math.random() - 0.5) * (isWide ? base : base * 0.8);
 
