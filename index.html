@@ -1577,14 +1577,18 @@ function spawnBubbleById(id){
       return false;
     };
 
-    do {
-      x = Math.random() * Math.max(1, (stageW - size));
-      const spawnBand = isWide ? 0.22 : 0.35;
-      // ✅ stagger spawns deeper above the stage so they enter over time (less “flat row”)
-const stagger = (i / (data.length - 1 || 1)) * (stageH * 0.35);
-y = -size - (Math.random() * (stageH * 0.25)) - stagger;
-      tries++;
-    } while (overlaps(x, y) && tries < 60);
+   do {
+  x = Math.random() * Math.max(1, (stageW - size));
+
+  // ✅ Spawn INSIDE the top of the stage (instant visibility)
+  const spawnBand = 0.12;   // top 12% of stage
+  y = (Math.random() * (stageH * spawnBand)) - (size * 0.8);
+
+  // ✅ Slight downward stagger so they don’t form a flat row
+  y += i * (size * 0.12);
+
+  tries++;
+} while (overlaps(x, y) && tries < 60);
 
     const speed = 0.45;
     const vx = (Math.random() - 0.5) * (isWide ? 1.15 : 0.55);
@@ -1685,7 +1689,10 @@ b.vx = Math.max(-MAX_VX, Math.min(MAX_VX, b.vx));
       // recycle at bottom
       if (b.y > stageH + 40){
         // ✅ respawn higher so they don’t re-enter in a tight wave
-b.y = - (Math.random() * (stageH * 0.35) + 80);
+// ✅ spawn inside the top of the visible stage (instant)
+const spawnBand = 0.12; // top 12% of the stage
+b.y = (Math.random() * (stageH * spawnBand)) - (b.size * 0.8);
+        b.y += i * (b.size * 0.12);
 
         // pick a fresh x (avoid stacking)
         let nx = 0;
