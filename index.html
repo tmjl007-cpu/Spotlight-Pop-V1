@@ -1520,8 +1520,11 @@ function spawnBubbleById(id){
   const size = Math.min(145, Math.max(100, stageW * 0.24));
   const x = Math.random() * Math.max(1, (stageW - size));
   const y = - (80 + Math.random()*220);
-  const speed = 0.45; // consistent, calm fall speed
-  const drift = (Math.random() - 0.5) * 0.8;  // gentle left/right float
+  const speed = 0.45;
+
+// More lateral energy on wider screens (iPad/Desktop)
+const isWide = window.innerWidth >= 768;
+const drift = (Math.random() - 0.5) * (isWide ? 0.9 : 0.4);
 
   const bObj = { id, el, x, y, size, speed, drift, popped:false };
 
@@ -1576,9 +1579,11 @@ const stageH = bubbleStage.clientHeight;
           tries++;
         } while (overlaps(x, y) && tries < 60);
 
-       const speed = 0.45;                         // ✅ same speed for all (recommended)
-const drift = (Math.random() - 0.5) * 0.4;  // ✅ gentle horizontal drift
+      const speed = 0.45;
 
+// More lateral energy on wider screens (iPad/Desktop)
+const isWide = window.innerWidth >= 768;
+const drift = (Math.random() - 0.5) * (isWide ? 0.9 : 0.4);
 const b = { id: item.id, el, x, y, size, speed, drift, popped:false };
 
        const pop = () => {
