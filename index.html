@@ -1520,13 +1520,13 @@ function spawnBubbleById(id){
   const size = Math.min(145, Math.max(100, stageW * 0.24)) * 0.90; // ✅ 10% smaller
   const x = Math.random() * Math.max(1, (stageW - size));
   const y = - (80 + Math.random()*220);
-  const speed = 0.45;
+    const speed = 0.45; // calm vertical fall
 
-// More lateral energy on wider screens (iPad/Desktop)
-const isWide = window.innerWidth >= 768;
-const drift = (Math.random() - 0.5) * (isWide ? 1.25 : 0.6);
+  // ✅ horizontal velocity (replaces drift)
+  const isWide = window.innerWidth >= 768;
+  const vx = (Math.random() - 0.5) * (isWide ? 1.2 : 0.6);
 
-  const bObj = { id, el, x, y, size, speed, drift, popped:false };
+  const bObj = { id, el, x, y, size, speed, vx, popped:false };
 
   const pop = () => { unlockAudio(); handleBubblePop(bObj); };
   el.addEventListener("click", pop);
@@ -1626,12 +1626,13 @@ el.addEventListener("touchend", (e)=>{ e.preventDefault(); pop(); }, { passive:f
 
     for (const b of bubbles){
       if (b.popped) continue;
+      if (typeof b.vx !== "number") b.vx = 0;
 
       // vertical fall
       b.y += b.speed *1.01;
 
       // horizontal drift
-      b.x += b.drift;
+      b.x += b.vx;
       
       // clamp drift so it never grows over time
 const MAX_DRIFT = 0.6; // tweak 0.4–0.8
@@ -1639,7 +1640,7 @@ b.drift = Math.max(-MAX_DRIFT, Math.min(MAX_DRIFT, b.drift));
 
       // bounce off left/right edges (slightly more energetic)
       if (b.x <= 0 || b.x + b.size >= stageW) {
-        b.drift *= -1;
+        b.vx *= -1.05;
       }
 
       // clamp on-screen
@@ -1656,30 +1657,25 @@ b.drift = Math.max(-MAX_DRIFT, Math.min(MAX_DRIFT, b.drift));
 
  if (dist > 0 && dist < minDist){
   const angle = Math.atan2(dy, dx);
-
-  // ✅ stronger separation (still controlled)
   const overlap = (minDist - dist);
-  const push = overlap * 0.18;
 
-  // ✅ split impulse between BOTH bubbles (feels like true bounce)
+  // separation (prevents overlap)
+  const push = overlap * 0.18;
   const ix = Math.cos(angle) * push;
   const iy = Math.sin(angle) * push * 0.08; // keep vertical calm
 
-  // push apart (both bubbles)
-  b.x     += ix;
-  b.y     += iy;
-  other.x -= ix;
-  other.y -= iy;
+  b.x     += ix;   b.y     += iy;
+  other.x -= ix;   other.y -= iy;
 
-  // ✅ elastic rebound (more noticeable, still stable)
-  const rebound = 0.095;
-  b.drift     += ix * rebound;
-  other.drift -= ix * rebound;
+  // ✅ REAL bounce: exchange horizontal impulse
+  const rebound = 0.14; // tune 0.10–0.22
+  b.vx     += ix * rebound;
+  other.vx -= ix * rebound;
 
-  // ✅ clamp drift so iPad never goes chaotic
-  const maxDrift = 1.8;
-  b.drift = Math.max(-maxDrift, Math.min(maxDrift, b.drift));
-  other.drift = Math.max(-maxDrift, Math.min(maxDrift, other.drift));
+  // ✅ clamp so it stays premium (no chaos)
+  const maxVX = 2.4;
+  b.vx = Math.max(-maxVX, Math.min(maxVX, b.vx));
+  other.vx = Math.max(-maxVX, Math.min(maxVX, other.vx));
 }
       } // ✅ CLOSE collision loop
 
