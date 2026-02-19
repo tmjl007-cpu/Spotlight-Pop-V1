@@ -1689,16 +1689,16 @@ function spawnBubbleById(id){
         }
       }
 
-      // ✅ recycle at bottom (keeps them flowing forever)
+      
       // ✅ recycle at bottom (faster desktop re-entry)
+// ✅ recycle at bottom (NO delay on all devices, continuous flow)
 if (b.y > stageH + b.size){
 
-  const isWide = window.innerWidth >= 768;
-
-  // Desktop: smaller respawn distance
-  const respawnDepth = isWide ? 0.08 : 0.20;
-
+  // micro-random respawn depth so it feels natural (not conveyor-belt)
+  const respawnDepth = 0.12; // top ~10% of stage (tune 0.06–0.14)
   b.y = -(Math.random() * (stageH * respawnDepth) + b.size);
+
+  // fresh x each time
   b.x = Math.random() * Math.max(1, (stageW - b.size));
 }
 
