@@ -1690,11 +1690,17 @@ function spawnBubbleById(id){
       }
 
       // ✅ recycle at bottom (keeps them flowing forever)
-      if (b.y > stageH + b.size){
-        // respawn slightly above visible area (fast re-entry)
-        b.y = -(Math.random() * (stageH * 0.20) + b.size);
-        b.x = Math.random() * Math.max(1, (stageW - b.size));
-      }
+      // ✅ recycle at bottom (faster desktop re-entry)
+if (b.y > stageH + b.size){
+
+  const isWide = window.innerWidth >= 768;
+
+  // Desktop: smaller respawn distance
+  const respawnDepth = isWide ? 0.08 : 0.20;
+
+  b.y = -(Math.random() * (stageH * respawnDepth) + b.size);
+  b.x = Math.random() * Math.max(1, (stageW - b.size));
+}
 
       b.el.style.transform = `translate3d(${b.x}px, ${b.y}px, 0)`;
     }
