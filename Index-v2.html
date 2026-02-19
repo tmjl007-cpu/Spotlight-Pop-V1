@@ -1959,6 +1959,30 @@ function handleBubblePop(b){
   const sr = bubbleStage.getBoundingClientRect();
   const cx = (r.left - sr.left) + r.width/2;
   const cy = (r.top  - sr.top)  + r.height/2;
+  // 💥 shockwave: nudge nearby bubbles away (arcade delight)
+const shockR = 220;     // radius
+const shockP = 0.35;    // power
+
+for (const o of bubbles){
+  if (o === b || o.popped) continue;
+
+  const ox = o.x + o.r;
+  const oy = o.y + o.r;
+
+  const dx = ox - cx;
+  const dy = oy - cy;
+
+  const dist = Math.hypot(dx, dy);
+  if (!dist || dist > shockR) continue;
+
+  const t = 1 - (dist / shockR);
+  const nx = dx / dist;
+  const ny = dy / dist;
+
+  o.vx += nx * (shockP * t);
+  o.vy += ny * (shockP * t);
+}
+
 
 let variant = "";
 
