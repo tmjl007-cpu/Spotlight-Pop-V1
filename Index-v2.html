@@ -127,6 +127,15 @@ body{
   pointer-events:auto;   /* ✅ allow clicks */
   z-index:2;  
 }
+    /* ✅ iPad / tablet override — MUST be below the base .introOverlay rule */
+@media (min-width: 768px) and (max-width: 1100px){
+
+  .introHeroBg{
+    background-size: 85%;
+    background-position: center 8%;
+  }
+
+}
 
 /* Start button */
 .startHeroBtn{
