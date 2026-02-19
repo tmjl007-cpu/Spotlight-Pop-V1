@@ -1533,18 +1533,17 @@ function spawnBubbleById(id){
   const stageW = rect.width;
   const stageH = rect.height;
 
-  // ✅ iPad/tablet detection (only once)
-  const isTablet = window.matchMedia(
-    "(hover: none) and (pointer: coarse) and (min-width: 768px)"
-  ).matches;
+  const isTablet = window.matchMedia("(hover: none) and (pointer: coarse) and (min-width: 768px)").matches;
+  const isWide = window.innerWidth >= 768;
 
-  // ✅ match your sizing logic (smaller on tablet)
   const size = Math.min(145, Math.max(100, stageW * 0.24)) * (isTablet ? 0.78 : 0.90);
+  const r = size / 2;
 
   const el = document.createElement("div");
   el.className = "bubble";
   applyPriorityColor(el, id);
   el.dataset.id = id;
+
   el.innerHTML = `
     <div>
       <div class="bTitle">${item.label}</div>
@@ -1552,18 +1551,43 @@ function spawnBubbleById(id){
     </div>
   `;
 
-  // ✅ spawn near top (fast re-entry)
-  const x = Math.random() * Math.max(1, (stageW - size));
-  const y = -size + (Math.random() * 12);
+  // spawn inside stage (avoid overlap a bit)
+  let x = 0, y = 0, tries = 0;
+  const pad = 10;
 
-  // ✅ faster fall on iPad, your normal elsewhere
-  const speed = isTablet ? 1.25 : 0.45;
+  const overlaps = (nx, ny) => {
+    for (const other of bubbles){
+      if (other.popped) continue;
+      const dx = (nx + r) - (other.x + other.r);
+      const dy = (ny + r) - (other.y + other.r);
+      const dist = Math.hypot(dx, dy);
+      if (dist < (r + other.r + pad)) return true;
+    }
+    return false;
+  };
 
-  // horizontal movement
-  const isWide = window.innerWidth >= 768;
-  const vx = (Math.random() - 0.5) * (isWide ? 1.15 : 0.55);
+  do {
+    x = Math.random() * Math.max(1, (stageW - size));
+    y = Math.random() * Math.max(1, (stageH - size));
+    tries++;
+  } while (overlaps(x, y) && tries < 100);
 
-  const bObj = { id, el, x, y, size, speed, vx, popped:false };
+  const base = isTablet ? 0.55 : 0.40;
+  const vx = (Math.random() - 0.5) * (isWide ? base : base * 0.8);
+  const vy = (Math.random() - 0.5) * (isWide ? base : base * 0.8);
+
+  const bObj = {
+    id,
+    el,
+    x,
+    y,
+    size,
+    r,
+    vx,
+    vy,
+    popped:false,
+    _wSeed: Math.random() * 1000
+  };
 
   const pop = () => { unlockAudio(); handleBubblePop(bObj); };
   el.addEventListener("click", pop);
@@ -1572,6 +1596,7 @@ function spawnBubbleById(id){
   bubbleStage.appendChild(el);
   bubbles.push(bObj);
 }
+
   function createBubbles(){
   if (!bubbleStage) return;
 
