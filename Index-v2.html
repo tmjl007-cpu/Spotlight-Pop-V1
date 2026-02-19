@@ -1579,17 +1579,19 @@ function spawnBubbleById(id){
 
   const stageW = bubbleStage.clientWidth;
   const stageH = bubbleStage.clientHeight;
-    const isTablet = window.matchMedia("(hover: none) and (pointer: coarse) and (min-width: 768px)").matches;
 
-  // ✅ define isWide ONCE, up here
+  const isTablet = window.matchMedia("(hover: none) and (pointer: coarse) and (min-width: 768px)").matches;
   const isWide = window.innerWidth >= 768;
 
-  // ✅ always 12 bubbles (no duplicates)
+  bubbles = [];                 // ✅ ensure clean slate
+  bubbleStage.innerHTML = "";   // ✅ clear DOM
+
   data.forEach((item, i) => {
     const el = document.createElement("div");
     el.className = "bubble";
     applyPriorityColor(el, item.id);
     el.dataset.id = item.id;
+
     el.innerHTML = `
       <div>
         <div class="bTitle">${item.label}</div>
@@ -1597,47 +1599,50 @@ function spawnBubbleById(id){
       </div>
     `;
 
-    // size tied to stage width
-    const size = Math.min(145, Math.max(100, stageW * 0.24)) * 0.90; // ✅ 10% smaller
-    const pad = 14;
+    // size (keeps your existing sizing logic)
+    const size = Math.min(145, Math.max(100, stageW * 0.24)) * (isTablet ? 0.78 : 0.90);
+    const r = size / 2;
 
-    // Find a non-overlapping start pos
+    // find non-overlapping position
     let x = 0, y = 0, tries = 0;
+    const pad = 10;
+
     const overlaps = (nx, ny) => {
       for (const other of bubbles){
         if (other.popped) continue;
-        const dx = (nx + size/2) - (other.x + other.size/2);
-        const dy = (ny + size/2) - (other.y + other.size/2);
+        const dx = (nx + r) - (other.x + other.r);
+        const dy = (ny + r) - (other.y + other.r);
         const dist = Math.hypot(dx, dy);
-        const minDist = (size/2 + other.size/2 + pad);
-        if (dist < minDist) return true;
+        if (dist < (r + other.r + pad)) return true;
       }
       return false;
     };
 
-   do {
-  x = Math.random() * Math.max(1, (stageW - size));
+    do {
+      x = Math.random() * Math.max(1, (stageW - size));
+      y = Math.random() * Math.max(1, (stageH - size));
+      tries++;
+    } while (overlaps(x, y) && tries < 120);
 
-  // ✅ Spawn INSIDE the top of the stage (instant visibility)
-  const spawnBand = 0.12;   // top 12% of stage
-  y = (Math.random() * (stageH * spawnBand)) - (size * 0.8);
+    // “aquarium drift” velocities (slow)
+    const base = isTablet ? 0.55 : 0.40;
+    const vx = (Math.random() - 0.5) * (isWide ? base : base * 0.8);
+    const vy = (Math.random() - 0.5) * (isWide ? base : base * 0.8);
 
-  // ✅ Slight downward stagger so they don’t form a flat row
-  y += i * (size * 0.12);
-
-  tries++;
-} while (overlaps(x, y) && tries < 60);
-
-    const speed = isTablet ? 1.25 : 0.45;
-    const vx = (Math.random() - 0.5) * (isWide ? 1.15 : 0.55);
-
-    const b = { id: item.id, el, x, y, size, speed, vx, popped:false };
-
-    const pop = () => {
-      unlockAudio();
-      handleBubblePop(b);
+    const b = {
+      id: item.id,
+      el,
+      x,
+      y,
+      size,
+      r,
+      vx,
+      vy,
+      popped:false,
+      _wSeed: Math.random() * 1000
     };
 
+    const pop = () => { unlockAudio(); handleBubblePop(b); };
     el.addEventListener("click", pop);
     el.addEventListener("touchend", (e)=>{ e.preventDefault(); pop(); }, { passive:false });
 
@@ -1647,6 +1652,7 @@ function spawnBubbleById(id){
 
   startBubbleLoop();
 }
+
 
     function startBubbleLoop(){
   if (bubbleRunning) return;
