@@ -1687,7 +1687,7 @@ b.vx = Math.max(-MAX_VX, Math.min(MAX_VX, b.vx));
       } // ✅ CLOSE collision loop
 
       // recycle at bottom
-      if (b.y > stageH + 40){
+      if (b.y + b.size > stageH + 10){
         // ✅ respawn higher so they don’t re-enter in a tight wave
 // ✅ spawn inside the top of the visible stage (instant)
 const spawnBand = 0.12; // top 12% of the stage
