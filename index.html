@@ -1641,7 +1641,7 @@ b.drift = Math.max(-MAX_DRIFT, Math.min(MAX_DRIFT, b.drift));
   const angle = Math.atan2(dy, dx);
 
   // slightly stronger separation
-  const push = (minDist - dist) * 0.18;
+  const push = (minDist - dist) * 0.22;
 
   const recoilX = Math.cos(angle) * push;
   const recoilY = Math.sin(angle) * push * 0.25;
@@ -1650,7 +1650,8 @@ b.drift = Math.max(-MAX_DRIFT, Math.min(MAX_DRIFT, b.drift));
   b.y += recoilY;
 
   // 💡 subtle elastic rebound (premium buoyancy)
-  b.drift += recoilX * 0.04;
+  b.drift += recoilX * 0.055;
+  b.drift *= 0.985;                       // ⬅️ keeps it stable (no chaos)
 }
       } // ✅ CLOSE collision loop
 
