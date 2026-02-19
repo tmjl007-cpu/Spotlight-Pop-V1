@@ -1615,6 +1615,10 @@ function spawnBubbleById(id){
     const stageW = stageRect.width;
     const stageH = stageRect.height;
     const t = performance.now();
+    // ✅ global breeze (slow group drift)
+const breezeAmp = 0.25;     // tune 0.10–0.35
+const breezeHz  = 0.00020;  // tune 0.00015–0.00040 (slower = calmer)
+const breeze = Math.sin(t * breezeHz) * breezeAmp;
 
     for (const b of bubbles){
       if (b.popped) continue;
@@ -1629,7 +1633,7 @@ const wobbleAmp = 0.35;          // tune 0.20–0.60
 const wobbleHz  = 0.0018;        // tune 0.0012–0.0026 (speed)
 const wobble = Math.sin(t * wobbleHz + (b._wSeed || (b._wSeed = Math.random() * 1000))) * wobbleAmp;
 
-b.x += b.vx + wobble;
+b.x += b.vx + wobble + breeze;
       
     // clamp vx so it never grows over time
 const MAX_VX = 1.8; // tweak 1.2–2.6
