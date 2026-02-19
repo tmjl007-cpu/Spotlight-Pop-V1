@@ -1546,13 +1546,8 @@ const stageH = bubbleStage.clientHeight;
 // ✅ define isWide ONCE, up here (before you use it anywhere)
 const isWide = window.innerWidth >= 768;
 
-// ✅ base bubble list
-let bubbleData = [...data];
-
-// ✅ add 2 extra bubbles only on wide screens
-if (isWide){
-  bubbleData = bubbleData.concat(data.slice(0, 2));
-}
+// ✅ use the real list only (always 12)
+data.forEach((item) => {
 
 bubbleData.forEach((item) => {
   
@@ -1634,9 +1629,9 @@ el.addEventListener("touchend", (e)=>{ e.preventDefault(); pop(); }, { passive:f
       // horizontal drift
       b.x += b.vx;
       
-      // clamp drift so it never grows over time
-const MAX_DRIFT = 0.6; // tweak 0.4–0.8
-b.drift = Math.max(-MAX_DRIFT, Math.min(MAX_DRIFT, b.drift));
+    // clamp vx so it never grows over time
+const MAX_VX = 1.8; // tweak 1.2–2.6
+b.vx = Math.max(-MAX_VX, Math.min(MAX_VX, b.vx));
 
       // bounce off left/right edges (slightly more energetic)
       if (b.x <= 0 || b.x + b.size >= stageW) {
