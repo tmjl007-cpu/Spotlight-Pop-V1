@@ -220,6 +220,12 @@ touch-action: manipulation;
     /* 👇 PASTE THIS RIGHT HERE */
 /* ✅ iPad/tablets only (coarse pointer): increase stage height without blowing up spacing */
 @media (min-width: 768px) and (hover: none) and (pointer: coarse){
+
+    .gameOnly{
+    max-width: 760px;   /* was effectively full width */
+    margin: 0 auto;
+  }
+  
   .bubbleStage{
     height: 62vh;          /* fills more vertical space on iPad */
     min-height: 520px;     /* safety */
