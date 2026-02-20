@@ -2146,7 +2146,10 @@ gameGrid.innerHTML = uniqueGames.map(id=>{
 // ✅ use totalResponders returned from Apps Script
 const total = Number(json.totalResponders || 0);
 
-scoreMeta.textContent = `${total} responses so far`;
+scoreMeta.textContent =
+  total === 1
+    ? "1 healthcare leader has participated so far"
+    : `${total} healthcare leaders have participated so far`;
         scoreList.innerHTML = summary.map(row=>{
           const c = Number(row.count || 0);
           const pct = total ? Math.round((c/total)*100) : 0;
