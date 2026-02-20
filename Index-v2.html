@@ -2142,10 +2142,11 @@ gameGrid.innerHTML = uniqueGames.map(id=>{
         catch(_){ throw new Error("Not JSON (likely login/HTML). Check Apps Script access."); }
 
         const summary = Array.isArray(json.summary) ? json.summary : [];
-        const total = summary.reduce((sum, row)=> sum + Number(row.count || 0), 0);
 
-        scoreMeta.textContent = total ? `${total} responses today` : "No responses yet";
+// ✅ use totalResponders returned from Apps Script
+const total = Number(json.totalResponders || 0);
 
+scoreMeta.textContent = `${total} responses so far`;
         scoreList.innerHTML = summary.map(row=>{
           const c = Number(row.count || 0);
           const pct = total ? Math.round((c/total)*100) : 0;
