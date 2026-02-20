@@ -2358,7 +2358,7 @@ continueBtn.addEventListener("click", () => {
         body: JSON.stringify(payload),
       })
       .then(r => r.json())
-      .then(res => console.log("Conference POST:", res))
+      .then(res => console.log("Conference POST:", JSON.stringify(res, null, 2)))
       .catch(err => console.warn("Conference POST failed:", err));
 
       // QR share
