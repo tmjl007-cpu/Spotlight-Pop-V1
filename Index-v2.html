@@ -2099,7 +2099,7 @@ gameGrid.innerHTML = uniqueGames.map(id=>{
     function closeLead(){ leadOverlay.classList.add("hidden"); }
 
     function validateLeadForm(fd){
-      const required = ["firstName","lastName","organization","email","phone"];
+      const required = ["firstName","lastName","organization","email"];
       for (const k of required){
         if (!String(fd.get(k) || "").trim()) {
           return `Please enter your ${k.replace(/([A-Z])/g," $1").toLowerCase()}.`;
