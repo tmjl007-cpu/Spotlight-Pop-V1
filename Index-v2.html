@@ -2434,40 +2434,6 @@ if (startOverBtn){
   });
 }
 
-    // --- Results overlay buttons ---
-const toLeadBtn = document.getElementById("toLeadBtn");
-const backBtn = document.getElementById("backBtn");
-
-const resultsOverlay = document.getElementById("resultsOverlay");
-const leadOverlay = document.getElementById("leadOverlay");
-// 👆 make sure this matches your actual lead capture overlay ID
-
-function openLeadOverlay() {
-  resultsOverlay?.classList.add("hidden");
-  leadOverlay?.classList.remove("hidden");
-}
-
-function backToBubbles() {
-  resultsOverlay?.classList.add("hidden");
-  document.getElementById("pickerOverlay")?.classList.remove("hidden"); 
-  // 👆 adjust if your bubble screen ID is different
-}
-
-if (toLeadBtn) {
-  toLeadBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    openLeadOverlay();
-  });
-}
-
-if (backBtn) {
-  backBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    backToBubbles();
-  });
-}
     // init
     renderPicked();
   </script>
