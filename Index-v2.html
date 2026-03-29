@@ -1206,10 +1206,7 @@ height: clamp(88px, 23vw, 130px);
             <input id="lastName" name="lastName" autocomplete="family-name" required />
           </div>
 
-          <div class="field">
-            <label for="organization">Organization</label>
-            <input id="organization" name="organization" autocomplete="organization" required />
-          </div>
+      </div>
 
           <div class="field">
             <label for="email">Email</label>
@@ -2112,7 +2109,7 @@ gameGrid.innerHTML = uniqueGames.map(id=>{
     function closeLead(){ leadOverlay.classList.add("hidden"); }
 
     function validateLeadForm(fd){
-      const required = ["firstName","lastName","organization","email"];
+      const required = ["firstName","lastName","email"];
       for (const k of required){
         if (!String(fd.get(k) || "").trim()) {
           return `Please enter your ${k.replace(/([A-Z])/g," $1").toLowerCase()}.`;
@@ -2343,7 +2340,6 @@ continueBtn.addEventListener("click", () => {
         aligned_games: picked.map(id => (gameMap[id] || {}).name).filter(Boolean),
         firstName: fd.get("firstName"),
         lastName: fd.get("lastName"),
-        organization: fd.get("organization"),
         email: fd.get("email"),
         phone: fd.get("phone"),
         role: fd.get("role"),
