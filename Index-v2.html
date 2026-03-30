@@ -1209,10 +1209,6 @@ height: clamp(88px, 23vw, 130px);
 
 </div>
 
-<div class="field" style="margin-top:12px;">
-  <label for="email">Email</label>
-  <input id="email" name="email" type="email" autocomplete="email" />
-</div>
 
         <div class="error" id="leadError"></div>
         <div class="success" id="leadSuccess"></div>
@@ -2343,7 +2339,6 @@ continueBtn.addEventListener("click", () => {
         aligned_games: picked.map(id => (gameMap[id] || {}).name).filter(Boolean),
         firstName: fd.get("firstName"),
         lastName: fd.get("lastName"),
-        email: fd.get("email"),
         phone: fd.get("phone"),
         role: fd.get("role"),
         createdAt: new Date().toISOString(),
