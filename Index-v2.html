@@ -1184,7 +1184,7 @@ height: clamp(88px, 23vw, 130px);
     <div id="leadHeader" class="modalTop">
       <div>
         <h2 class="title">Your Custom Game Plan Awaits</h2>
-        <p class="subtext">Tell us where to send your customized game plan.</p>
+        <p class="subtext">Enter your details to unlock your customized game plan.</p>
       </div>
       <button class="closeBtn" id="closeLeadBtn" aria-label="Close lead capture">✕</button>
     </div>
@@ -1211,7 +1211,7 @@ height: clamp(88px, 23vw, 130px);
 
 <div class="field" style="margin-top:12px;">
   <label for="email">Email</label>
-  <input id="email" name="email" type="email" autocomplete="email" required />
+  <input id="email" name="email" type="email" autocomplete="email" />
 </div>
 
         <div class="error" id="leadError"></div>
@@ -2108,14 +2108,14 @@ gameGrid.innerHTML = uniqueGames.map(id=>{
     function closeLead(){ leadOverlay.classList.add("hidden"); }
 
     function validateLeadForm(fd){
-      const required = ["firstName","lastName","email"];
+      const required = ["firstName","lastName"];
       for (const k of required){
         if (!String(fd.get(k) || "").trim()) {
           return `Please enter your ${k.replace(/([A-Z])/g," $1").toLowerCase()}.`;
         }
       }
-      const email = String(fd.get("email") || "").trim();
-      if (!/^\S+@\S+\.\S+$/.test(email)) return "Please enter a valid email address.";
+  const email = String(fd.get("email") || "").trim();
+if (email && !/^\S+@\S+\.\S+$/.test(email)) return "Please enter a valid email address.";
       return null;
     }
 
